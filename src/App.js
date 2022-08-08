@@ -1,24 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import TodoList from "./components/TodoList/TodoList";
+import { BrowserRouter, Switch, useHistory } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import About from "./pages/About/About";
+import Detail from "./pages/Detail/Detail";
+import PageNotFound from "./pages/PageNotFound/PageNotFound";
+import Profile from "./pages/Profile/Profile";
+import TodoListRedux from "./pages/TodoList/TodoListRedux";
+import TodoListSaga from "./pages/TodoListSaga/TodoListSaga";
+import LoadingComponent from "./components/Global/LoadingComponent/LoadingComponent";
+import DemoModal from "./pages/HOC-Modal/DemoModal";
+import Modal from "./HOC/Modal/Modal";
+import { HomeTemplate } from "./templates/HomeTemplate/HomeTemplate";
+import { UserLoginTemplate } from "./templates/HomeTemplate/UserLoginTemplate";
+import LoginJiraWithFormik from "./pages/JiraClone/LoginJira/LoginJira";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 function App() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({
+      type: "ADD_HISTORY",
+      history,
+    });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Modal></Modal>
+      <LoadingComponent></LoadingComponent>
+      <Switch>
+        <HomeTemplate
+          exact
+          path="/todolist_thunk"
+          Component={TodoListRedux}
+        ></HomeTemplate>
+        <HomeTemplate
+          exact
+          path="/todolist_saga"
+          Component={TodoListSaga}
+        ></HomeTemplate>
+        <HomeTemplate
+          exact
+          path="/todolist"
+          Component={TodoList}
+        ></HomeTemplate>
+        <HomeTemplate exact path="/hoc" Component={DemoModal}></HomeTemplate>
+
+        <HomeTemplate exact path="/home" Component={Home}></HomeTemplate>
+        <HomeTemplate exact path="/about" Component={About}></HomeTemplate>
+        <UserLoginTemplate
+          exact
+          path="/login"
+          Component={LoginJiraWithFormik}
+        ></UserLoginTemplate>
+        <HomeTemplate
+          exact
+          path="/detail/:id"
+          Component={Detail}
+        ></HomeTemplate>
+        <HomeTemplate exact path="/profile" Component={Profile}></HomeTemplate>
+        <HomeTemplate exact path="*" Component={PageNotFound}></HomeTemplate>
+        <HomeTemplate exact path="/" Component={Home}></HomeTemplate>
+      </Switch>
+    </>
   );
 }
 
