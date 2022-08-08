@@ -14,7 +14,7 @@ function* signIn(action) {
   });
   yield delay(300);
   try {
-    let { data } = yield call(JiraService.signIn(action.userLogin));
+    let { data } = yield call(() => JiraService.signIn(action.userLogin));
     localStorage.setItem(TOKEN, data.content.accessToken);
     localStorage.setItem(USER_LOGIN, JSON.stringify(data.content));
     yield put({

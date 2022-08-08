@@ -7,6 +7,8 @@ import LoadingReducer from "./reducers/LoadingReducer";
 import ModalReducer from "./reducers/ModalReducer";
 import HistoryReducer from "./reducers/HistoryReducer";
 import JiraUserLoginReducer from "./reducers/JiraUserLoginReducer";
+import JiraProjectCategoryReducer from "./reducers/JiraProjectCategoryReducer";
+
 const middlewareSaga = createSagaMiddleware();
 const rootReducer = combineReducers({
   ToDoListReducer,
@@ -14,6 +16,7 @@ const rootReducer = combineReducers({
   ModalReducer,
   HistoryReducer,
   JiraUserLoginReducer,
+  JiraProjectCategoryReducer,
 });
 
 const store = createStore(

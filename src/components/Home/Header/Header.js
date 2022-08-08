@@ -60,6 +60,26 @@ export default function Header() {
                 HOC
               </NavLink>
             </li>
+            <li className="nav-item ">
+              <NavLink
+                activeStyle={{ fontWeight: 700 }}
+                className="nav-link "
+                aria-current="page"
+                to="/jira"
+              >
+                Jira Clone
+              </NavLink>
+            </li>
+            <li className="nav-item ">
+              <NavLink
+                activeStyle={{ fontWeight: 700 }}
+                className="nav-link "
+                aria-current="page"
+                to="/jira/projects"
+              >
+                Jira Project
+              </NavLink>
+            </li>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
