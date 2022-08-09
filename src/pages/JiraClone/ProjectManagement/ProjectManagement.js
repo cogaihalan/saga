@@ -1,7 +1,7 @@
 import { Button, Space, Table } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
-import { SpaceContext } from "antd/lib/space";
+import HTMLReactParser from "html-react-parser";
 const data = [
   {
     members: [
@@ -213,8 +213,8 @@ export default function ProjectManagement(props) {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      render: (text, record, index) => {
-        return <div key={index}>{text}</div>;
+      render: (text, index) => {
+        return <div key={index}>{HTMLReactParser(text)}</div>;
       },
     },
     {

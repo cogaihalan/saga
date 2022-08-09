@@ -1,12 +1,10 @@
-import { Axios } from "axios";
+import Axios from "axios";
 import { JIRA_DOMAIN, TOKEN } from "../../utils/constants/settingSystem";
-
 class JiraServices {
   signIn = (userLogin) => {
-    return Axios({
-      url: `${JIRA_DOMAIN}/Users/signin`,
-      method: "POST",
-      data: userLogin,
+    return Axios.post(`${JIRA_DOMAIN}/Users/signin`, {
+      email: userLogin.username,
+      passWord: userLogin.password,
     });
   };
   getAllProjectCategory = () => {
