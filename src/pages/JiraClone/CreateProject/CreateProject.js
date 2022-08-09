@@ -9,7 +9,7 @@ import {
   GET_ALL_PROJECT_CATEGORY_API,
 } from "../../../redux/types/JiraConstants";
 function CreateProject(props) {
-  const { errors, handleChange, handleSubmit, setFieldValue } = props;
+  const { handleChange, handleSubmit, setFieldValue } = props;
   const listCategoryProject = useSelector(
     (state) => state.JiraProjectCategoryReducer.listCategoryProject
   );
@@ -35,7 +35,7 @@ function CreateProject(props) {
               name="projectName"
             />
 
-            <div className="text text-danger">{errors.projectName}</div>
+            {/* <div className="text text-danger">{errors.projectName}</div> */}
           </div>
           <div className="form-group">
             <p className="mt-3 form-text">Description</p>
@@ -44,7 +44,7 @@ function CreateProject(props) {
               name="description"
               initialValue=""
               init={{
-                height: 400,
+                height: 420,
                 menubar: false,
                 plugins: [
                   "advlist autolink lists link image charmap print preview anchor",

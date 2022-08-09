@@ -1,20 +1,7 @@
-import { GET_ALL_PROJECT_CATEGORY } from "../types/JiraConstants";
+import { GET_ALL_PROJECT_CATEGORY } from "../../types/JiraConstants";
 
 const initialState = {
-  listCategoryProject: [
-    {
-      id: 1,
-      projectCategoryName: "Dự án web",
-    },
-    {
-      id: 2,
-      projectCategoryName: "Dự án phần mềm",
-    },
-    {
-      id: 3,
-      projectCategoryName: "Dự án di động",
-    },
-  ],
+  listCategoryProject: [],
 };
 
 const JiraProjectCategoryReducer = (state = initialState, action) => {

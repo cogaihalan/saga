@@ -1,173 +1,26 @@
-import { Button, Space, Table } from "antd";
+import { Button, Space, Table, Tag } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import HTMLReactParser from "html-react-parser";
-const data = [
-  {
-    members: [
-      {
-        userId: 850,
-        name: "AnhHoang",
-        avatar: "https://ui-avatars.com/api/?name=AnhHoang",
-      },
-      {
-        userId: 984,
-        name: "Change Name123123",
-        avatar: "https://ui-avatars.com/api/?name=Change Name123123",
-      },
-      {
-        userId: 1027,
-        name: "thanh",
-        avatar: "https://ui-avatars.com/api/?name=thanh",
-      },
-    ],
-    creator: {
-      id: 2092,
-      name: "chien khu",
-    },
-    id: 6797,
-    projectName: "chien khu viet bac 1",
-    description: "<p>s</p>",
-    categoryId: 1,
-    categoryName: "Dự án web",
-    alias: "chien-khu-viet-bac-1",
-    deleted: false,
-  },
-  {
-    members: [
-      {
-        userId: 1557,
-        name: "huyen",
-        avatar: "https://ui-avatars.com/api/?name=huyen",
-      },
-      {
-        userId: 1996,
-        name: "tuan",
-        avatar: "https://ui-avatars.com/api/?name=tuan",
-      },
-      {
-        userId: 2009,
-        name: "long",
-        avatar: "https://ui-avatars.com/api/?name=long",
-      },
-      {
-        userId: 2071,
-        name: "anh Quan",
-        avatar: "https://ui-avatars.com/api/?name=anh Quan",
-      },
-    ],
-    creator: {
-      id: 2092,
-      name: "chien khu",
-    },
-    id: 6798,
-    projectName: "chien khu viet bac 2",
-    description: "<p>chien khu viet bac 2</p>",
-    categoryId: 3,
-    categoryName: "Dự án di động",
-    alias: "chien-khu-viet-bac-2",
-    deleted: false,
-  },
-  {
-    members: [
-      {
-        userId: 1027,
-        name: "thanh",
-        avatar: "https://ui-avatars.com/api/?name=thanh",
-      },
-    ],
-    creator: {
-      id: 2092,
-      name: "chien khu",
-    },
-    id: 6799,
-    projectName: "chien khu viet bac 3",
-    description: "<p>chien khu viet bac 3</p>",
-    categoryId: 1,
-    categoryName: "Dự án web",
-    alias: "chien-khu-viet-bac-3",
-    deleted: false,
-  },
-  {
-    members: [],
-    creator: {
-      id: 2344,
-      name: "Bao",
-    },
-    id: 6800,
-    projectName: "Test1",
-    description: "<p>123123</p>",
-    categoryId: 2,
-    categoryName: "Dự án phần mềm",
-    alias: "test1",
-    deleted: false,
-  },
-  {
-    members: [],
-    creator: {
-      id: 2360,
-      name: "Hoàng",
-    },
-    id: 6804,
-    projectName: "ProjectName",
-    description: "<p>test project</p>",
-    categoryId: 2,
-    categoryName: "Dự án phần mềm",
-    alias: "projectname",
-    deleted: false,
-  },
-  {
-    members: [
-      {
-        userId: 850,
-        name: "AnhHoang",
-        avatar: "https://ui-avatars.com/api/?name=AnhHoang",
-      },
-      {
-        userId: 1861,
-        name: "Khoasharp",
-        avatar: "https://ui-avatars.com/api/?name=Khoasharp",
-      },
-      {
-        userId: 1191,
-        name: "khai 123",
-        avatar: "https://ui-avatars.com/api/?name=khai 123",
-      },
-      {
-        userId: 827,
-        name: "hohoka",
-        avatar: "https://ui-avatars.com/api/?name=hohoka",
-      },
-      {
-        userId: 984,
-        name: "Change Name123123",
-        avatar: "https://ui-avatars.com/api/?name=Change Name123123",
-      },
-      {
-        userId: 1024,
-        name: "zoro112212",
-        avatar: "https://ui-avatars.com/api/?name=zoro112212",
-      },
-    ],
-    creator: {
-      id: 2229,
-      name: "string",
-    },
-    id: 6822,
-    projectName: "newss",
-    description: "<p>newss</p>",
-    categoryId: 1,
-    categoryName: "Dự án web",
-    alias: "newss",
-    deleted: false,
-  },
-];
+import {
+  GET_ALL_PROJECTS_API,
+  DELETE_PROJECT_API,
+} from "../../../redux/types/JiraConstants";
+
 export default function ProjectManagement(props) {
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
-
+  const listProjects = useSelector(
+    (stateList) => stateList.JiraManageAllProjects.listProjects
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({
+      type: GET_ALL_PROJECTS_API,
+    });
+  }, []);
   const handleChange = (pagination, filters, sorter) => {
-    console.log("Various parameters", pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -185,29 +38,47 @@ export default function ProjectManagement(props) {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (nextItem, item) => nextItem.id - item.id,
     },
     {
       title: "Project Name",
       dataIndex: "projectName",
       key: "projectName",
+      sorter: (nextItem, item) => {
+        const projectName1 = nextItem.projectName?.trim().toLowerCase();
+        const projectName2 = item.projectName?.trim().toLowerCase();
+        if (projectName1 < projectName2) return -1;
+        return 1;
+      },
     },
     {
       title: "Creator",
       dataIndex: "creator",
       key: "creator",
       render: (creator, index) => {
-        return <div key={index}>{creator.name}</div>;
+        return (
+          <Tag key={index} color="lime">
+            {creator.name}
+          </Tag>
+        );
+      },
+      sorter: (nextItem, item) => {
+        const creator1 = nextItem.creator.name?.trim().toLowerCase();
+        const creator2 = item.creator.name?.trim().toLowerCase();
+
+        if (creator1 < creator2) return -1;
+        return 1;
       },
     },
     // {
     //   title: "Members",
     //   dataIndex: "members",
     //   key: "members",
-    // //   render: (members, index) => {
-    // //     return members.map((member) => (
-    // //       <span key={index + 1}>{member.name},</span>
-    // //     ));
-    // //   },
+    //   //   render: (members, index) => {
+    //   //     return members.map((member) => (
+    //   //       <span key={index + 1}>{member.name},</span>
+    //   //     ));
+    //   //   },
     // },
     {
       title: "Description",
@@ -232,7 +103,14 @@ export default function ProjectManagement(props) {
             <button className="btn btn-primary">
               <EditOutlined />
             </button>
-            <button className="btn btn-danger">
+            <button
+              onClick={() => {
+                dispatch({
+                  type: DELETE_PROJECT_API,
+                });
+              }}
+              className="btn btn-danger"
+            >
               <DeleteOutlined />
             </button>
           </Space>
@@ -243,7 +121,6 @@ export default function ProjectManagement(props) {
   return (
     <div className="container-fluid d-flex flex-column ">
       <h3 className="m-2 fs-1 heading">Project Management</h3>
-      <Table columns={columns} dataSource={data} onChange={handleChange} />
       <Space
         style={{
           marginBottom: 16,
@@ -252,6 +129,12 @@ export default function ProjectManagement(props) {
         <Button onClick={clearFilters}>Clear filters</Button>
         <Button onClick={clearAll}>Clear filters and sorters</Button>
       </Space>
+      <Table
+        columns={columns}
+        rowKey={"id"}
+        dataSource={listProjects}
+        onChange={handleChange}
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { all } from "redux-saga/effects";
 import * as JiraLoginSaga from "./JiraSagas/JiraLoginSaga";
 import * as JiraProjectCategorySaga from "./JiraSagas/JiraProjectCategorySaga";
 import * as JiraCreateProjectSaga from "./JiraSagas/JiraCreateProjectSaga";
+import * as JiraManageAllProjects from "./JiraSagas/JiraMangeProjectsSaga";
 export function* rootSaga() {
   yield all([
     // ToDoListSaga.theoDoiActionGetTaskAPI(),
@@ -12,5 +13,7 @@ export function* rootSaga() {
     JiraLoginSaga.theoDoiSignIn(),
     JiraProjectCategorySaga.theoDoiGetAllProjectCategory(),
     JiraCreateProjectSaga.theoDoiCreateProjectAPI(),
+    JiraManageAllProjects.theoDoiGetAllProjects(),
+    JiraManageAllProjects.theoDoiDeleteProject(),
   ]);
 }

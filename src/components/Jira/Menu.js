@@ -1,15 +1,20 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 export default function Menu() {
+  const { name, avatar } = useSelector(
+    (stateList) => stateList.JiraUserLoginReducer.userLogin
+  );
+
   return (
     <div className="menu">
       <div className="account">
         <div className="avatar">
-          <img src="/Jira/download.jfif" alt="profileimage" />
+          <img src={avatar} alt="profileimage" />
         </div>
         <div className="account-info">
-          <p>Jira</p>
+          <p>{name}</p>
           <p>Report bugs</p>
         </div>
       </div>
@@ -31,13 +36,13 @@ export default function Menu() {
           </NavLink>
         </div>
         <div>
-          <i class="fa fa-list-alt"></i>
+          <i className="fa fa-list-alt"></i>
           <NavLink
             className="text-dark"
             activeClassName="active "
             to="/jira/projects"
           >
-            Project Settings
+            Projects List
           </NavLink>
         </div>
       </div>

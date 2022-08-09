@@ -6,8 +6,9 @@ import { rootSaga } from "./sagas/rootSaga";
 import LoadingReducer from "./reducers/LoadingReducer";
 import ModalReducer from "./reducers/ModalReducer";
 import HistoryReducer from "./reducers/HistoryReducer";
-import JiraUserLoginReducer from "./reducers/JiraUserLoginReducer";
-import JiraProjectCategoryReducer from "./reducers/JiraProjectCategoryReducer";
+import JiraUserLoginReducer from "./reducers/Jira/JiraUserLoginReducer";
+import JiraProjectCategoryReducer from "./reducers/Jira/JiraProjectCategoryReducer";
+import JiraManageAllProjects from "./reducers/Jira/JiraGetAllProjects";
 
 const middlewareSaga = createSagaMiddleware();
 const rootReducer = combineReducers({
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   HistoryReducer,
   JiraUserLoginReducer,
   JiraProjectCategoryReducer,
+  JiraManageAllProjects,
 });
 
 const store = createStore(

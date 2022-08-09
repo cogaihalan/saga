@@ -8,10 +8,7 @@ class JiraServices {
     });
   };
   getAllProjectCategory = () => {
-    return Axios({
-      url: `${JIRA_DOMAIN}/ProjectCategory`,
-      method: "GET",
-    });
+    return Axios.get(`${JIRA_DOMAIN}/ProjectCategory`);
   };
   createProject = (models) => {
     return Axios({
@@ -32,6 +29,7 @@ class JiraServices {
     return Axios({
       url: `${JIRA_DOMAIN}/Project/getAllProject`,
       method: "GET",
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
 }

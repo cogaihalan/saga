@@ -10,7 +10,7 @@ import {
 function* getAllProjectCategory(action) {
   yield delay(300);
   try {
-    const { data, status } = yield call(JiraService.getAllProjectCategory());
+    const { data, status } = yield call(JiraService.getAllProjectCategory);
     if (status === STATUS_CODE.SUCCESS) {
       yield put({
         type: GET_ALL_PROJECT_CATEGORY,

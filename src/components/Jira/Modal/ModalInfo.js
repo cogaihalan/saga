@@ -152,9 +152,14 @@ export default function ModalInfo() {
                                 voluptatum saepe ab officiis alias totam ad
                                 accusamus molestiae?
                               </p>
-                              <div>
-                                <span style={{ color: "#929398" }}>Edit</span>•
-                                <span style={{ color: "#929398" }}>Delete</span>
+                              <div className="task-btns">
+                                <button className="btn btn-primary me-2">
+                                  Edit
+                                </button>
+
+                                <button className="btn btn-danger">
+                                  Delete
+                                </button>
                               </div>
                             </div>
                           </div>

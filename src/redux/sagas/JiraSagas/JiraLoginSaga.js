@@ -22,7 +22,7 @@ function* signIn(action) {
       userLogin: data.content,
     });
     let history = yield select((stateList) => stateList.HistoryReducer.history);
-    history.push("/home");
+    history.push("/jira");
   } catch (err) {
     throw new Error(err.message);
   }

@@ -1,8 +1,21 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css");
-
+.form-control {
+  margin-top: 8px;
+}
+.btn:focus {
+  box-shadow: none !important;
+  outline: none;
+}
+.form-control:focus {
+  box-shadow: none !important;
+  outline: none;
+}
 a {
   text-decoration: unset !important;
+}
+p {
+  margin-bottom: 0 !important;
 }
 .jira {
   height: 100vh;
