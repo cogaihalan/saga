@@ -32,7 +32,7 @@ export default function Menu() {
             activeClassName="active "
             to="/jira/create"
           >
-            Project Settings
+            New Project
           </NavLink>
         </div>
         <div>

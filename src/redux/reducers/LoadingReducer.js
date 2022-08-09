@@ -3,7 +3,7 @@ const initialState = {
   isLoading: false,
 };
 
-const LoadingReducer = (state = initialState, { type, payload }) => {
+const LoadingReducer = (state = initialState, { type }) => {
   switch (type) {
     case DISPLAY_LOADING:
       return { ...state, isLoading: true };

@@ -97,7 +97,7 @@ export default function ProjectManagement(props) {
     {
       title: "Action",
       key: "action",
-      render: () => {
+      render: (project) => {
         return (
           <Space>
             <button className="btn btn-primary">
@@ -107,6 +107,7 @@ export default function ProjectManagement(props) {
               onClick={() => {
                 dispatch({
                   type: DELETE_PROJECT_API,
+                  projectId: project.id
                 });
               }}
               className="btn btn-danger"

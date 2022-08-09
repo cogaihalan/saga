@@ -10,13 +10,13 @@ class JiraServices {
   getAllProjectCategory = () => {
     return Axios.get(`${JIRA_DOMAIN}/ProjectCategory`);
   };
-  createProject = (models) => {
-    return Axios({
-      url: `${JIRA_DOMAIN}/Project/createProject`,
-      method: "POST",
-      data: models,
-    });
-  };
+  // createProject = (models) => {
+  //   return Axios({
+  //     url: `${JIRA_DOMAIN}/Project/createProject`,
+  //     method: "POST",
+  //     data: models,
+  //   });
+  // };
   createProjectAuthorized = (models) => {
     return Axios({
       url: `${JIRA_DOMAIN}/Project/createProjectAuthorize`,
@@ -29,6 +29,13 @@ class JiraServices {
     return Axios({
       url: `${JIRA_DOMAIN}/Project/getAllProject`,
       method: "GET",
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
+  deleteProject = (projectID) => {
+    return Axios({
+      url: `${JIRA_DOMAIN}/Project/deleteProject?projectId=${projectID}`,
+      method: "DELETE",
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
