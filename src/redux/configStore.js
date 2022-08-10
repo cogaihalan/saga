@@ -9,7 +9,8 @@ import HistoryReducer from "./reducers/HistoryReducer";
 import JiraUserLoginReducer from "./reducers/Jira/JiraUserLoginReducer";
 import JiraProjectCategoryReducer from "./reducers/Jira/JiraProjectCategoryReducer";
 import JiraManageAllProjects from "./reducers/Jira/JiraManageAllProjects";
-
+import JiraDrawerReducer from "./reducers/Jira/JiraDrawerReducer";
+import JiraProjectReducer from "./reducers/Jira/JiraProjectReducer";
 const middlewareSaga = createSagaMiddleware();
 const rootReducer = combineReducers({
   ToDoListReducer,
@@ -19,6 +20,8 @@ const rootReducer = combineReducers({
   JiraUserLoginReducer,
   JiraProjectCategoryReducer,
   JiraManageAllProjects,
+  JiraDrawerReducer,
+  JiraProjectReducer,
 });
 
 const store = createStore(

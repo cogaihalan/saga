@@ -4,7 +4,6 @@ import { BrowserRouter, Switch, useHistory } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Detail from "./pages/Detail/Detail";
-import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Profile from "./pages/Profile/Profile";
 import TodoListRedux from "./pages/TodoList/TodoListRedux";
 import TodoListSaga from "./pages/TodoListSaga/TodoListSaga";
@@ -20,6 +19,7 @@ import { JiraTemplate } from "./templates/HomeTemplate/JiraTemplate";
 import MainJira from "./components/Jira/Main";
 import CreateProjectWithFormik from "./pages/JiraClone/CreateProject/CreateProject";
 import ProjectManagement from "./pages/JiraClone/ProjectManagement/ProjectManagement";
+import JiraModal from "./HOC/JIra/JiraModal";
 function App() {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -32,6 +32,7 @@ function App() {
   return (
     <>
       <Modal></Modal>
+      <JiraModal></JiraModal>
       <LoadingComponent></LoadingComponent>
       <Switch>
         <HomeTemplate

@@ -6,11 +6,11 @@ import { DISPLAY_LOADING, HIDE_LOADING } from "../../types/LoadingConstants";
 
 // Quản lý action saga
 function* createProjectAPI(action) {
-  yield put({
-    type: DISPLAY_LOADING,
-  });
-  yield delay(500);
   try {
+    yield put({
+      type: DISPLAY_LOADING,
+    });
+    yield delay(300);
     const { status } = yield call(
       JiraService.createProjectAuthorized,
       action.models
@@ -24,7 +24,6 @@ function* createProjectAPI(action) {
   } catch (err) {
     throw new Error(err.message);
   }
-
   yield put({
     type: HIDE_LOADING,
   });

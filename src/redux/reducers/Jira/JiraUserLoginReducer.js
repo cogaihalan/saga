@@ -1,4 +1,5 @@
 import { USER_LOGIN } from "../../../utils/constants/settingSystem";
+import { GET_USER } from "../../types/JiraConstants";
 
 let user = {};
 if (localStorage.getItem(USER_LOGIN)) {
@@ -6,13 +7,15 @@ if (localStorage.getItem(USER_LOGIN)) {
 }
 const initialState = {
   userLogin: user,
+  listUsers: [],
 };
 
 const JiraUserLoginReducer = (state = initialState, action) => {
   switch (action.type) {
     case "CHANGE_USER":
-      state.userLogin = action.userLogin;
-      return { ...state };
+      return { ...state, userLogin: action.userLogin };
+    case GET_USER:
+      return { ...state, listUsers: action.listUsers };
     default:
       return { ...state };
   }

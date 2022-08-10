@@ -1,34 +1,52 @@
-import React from "react";
-
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import { Layout, Menu } from "antd";
+import React, { useState } from "react";
+const { Sider } = Layout;
 export default function Sidebar() {
+  const [collapsed, setCollapsed] = useState(false);
   return (
     <div className="sidebar">
-      <div className="sideBar">
-        <div className="sideBar-top">
-          <div className="sideBar-icon">
-            <i className="fab fa-jira" />
-            <span className="title">JIRA</span>
-          </div>
-          <div
-            className="sideBar-icon"
-            data-bs-toggle="modal"
-            data-bs-target="#searchModal"
-          >
-            <i className="fa fa-search" />
-            <span className="title">SEARCH ISSUES</span>
-          </div>
-          <div className="sideBar-icon">
-            <i className="fa fa-plus" />
-            <span className="title">CREATE ISSUES</span>
-          </div>
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        style={{ height: "100%" }}
+      >
+        <div className="logo" />
+        <div
+          onClick={() => {
+            setCollapsed(!collapsed);
+          }}
+          className="me-2 mb-3 text-end"
+          style={{ color: "#fff", fontSize: "20px" }}
+        >
+          
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+         
         </div>
-        <div className="sideBar-bottom">
-          <div className="sideBar-icon">
-            <i className="fa fa-question-circle" />
-            <span className="title">ABOUT</span>
-          </div>
-        </div>
-      </div>
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={["1"]}
+          items={[
+            {
+              key: "1",
+              icon: <PlusOutlined />,
+              label: "Create Issue",
+            },
+            {
+              key: "2",
+              icon: <SearchOutlined />,
+              label: "Search Issue",
+            },
+          ]}
+        />
+      </Sider>
     </div>
   );
 }

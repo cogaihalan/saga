@@ -7,16 +7,16 @@ class JiraServices {
       passWord: userLogin.password,
     });
   };
+  getUser = (userKeyword) => {
+    return Axios({
+      method: "GET",
+      url: `${JIRA_DOMAIN}/Users/getUser?keyword=${userKeyword}`,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
   getAllProjectCategory = () => {
     return Axios.get(`${JIRA_DOMAIN}/ProjectCategory`);
   };
-  // createProject = (models) => {
-  //   return Axios({
-  //     url: `${JIRA_DOMAIN}/Project/createProject`,
-  //     method: "POST",
-  //     data: models,
-  //   });
-  // };
   createProjectAuthorized = (models) => {
     return Axios({
       url: `${JIRA_DOMAIN}/Project/createProjectAuthorize`,
@@ -32,10 +32,33 @@ class JiraServices {
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
+  getProjectByID = (projectID) => {
+    return Axios({
+      url: `${JIRA_DOMAIN}/Project/getProjectDetail?id=${projectID}`,
+      method: "GET",
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
   deleteProject = (projectID) => {
     return Axios({
       url: `${JIRA_DOMAIN}/Project/deleteProject?projectId=${projectID}`,
       method: "DELETE",
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
+  updateProject = (projectUpdate) => {
+    return Axios({
+      url: `${JIRA_DOMAIN}/Project/updateProject?projectId=${projectUpdate.id}`,
+      method: "PUT",
+      data: projectUpdate,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
+  assignUserToProject = (userProject) => {
+    return Axios({
+      url: `${JIRA_DOMAIN}/Project/assignUserProject`,
+      method: "POST",
+      data: userProject,
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
