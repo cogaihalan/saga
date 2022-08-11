@@ -15,7 +15,7 @@ import HTMLReactParser from "html-react-parser";
 import {
   GET_ALL_PROJECTS_API,
   DELETE_PROJECT_API,
-  OPEN_FORM_EDIT,
+  OPEN_FORM_EDIT_TASK,
   EDIT_PROJECT,
   GET_USER_API,
   ASSIGN_USER_TO_PROJECT_API,
@@ -220,7 +220,8 @@ export default function ProjectManagement(props) {
               onClick={() => {
                 // Mở form edit
                 dispatch({
-                  type: OPEN_FORM_EDIT,
+                  type: OPEN_FORM_EDIT_TASK,
+                  title: "EDIT PROJECT",
                   Component: FormEditProject,
                   SubmitFunction: () => {},
                 });

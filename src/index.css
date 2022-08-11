@@ -3,6 +3,9 @@
 .form-control {
   margin-top: 8px;
 }
+td {
+  vertical-align: middle;
+}
 .btn:focus {
   box-shadow: none !important;
   outline: none;

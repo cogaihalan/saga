@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CLOSE_DRAWER } from "../../redux/types/JiraConstants";
 
 export default function JiraModal() {
-  const { visible, ComponentDrawer, submitFunction } = useSelector(
+  const { visible, ComponentDrawer, submitFunction , title } = useSelector(
     (state) => state.JiraDrawerReducer
   );
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ export default function JiraModal() {
   return (
     <>
       <Drawer
-        title="Edit Project"
+        title={title}
         width={720}
         onClose={onClose}
         visible={visible}

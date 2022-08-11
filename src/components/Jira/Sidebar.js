@@ -6,8 +6,15 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  OPEN_FORM_CREATE_TASK,
+  OPEN_FORM_EDIT_TASK,
+} from "../../redux/types/JiraConstants";
+import FormCreateTask from "../Forms/Jira/FormCreateTask";
 const { Sider } = Layout;
 export default function Sidebar() {
+  const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(true);
   return (
     <div className="sidebar">
@@ -25,9 +32,7 @@ export default function Sidebar() {
           className="me-2 mb-3 text-center"
           style={{ color: "#fff", fontSize: "20px" }}
         >
-          
-            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-         
+          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         </div>
         <Menu
           theme="dark"
@@ -38,6 +43,14 @@ export default function Sidebar() {
               key: "1",
               icon: <PlusOutlined />,
               label: "Create Issue",
+              onClick: () => {
+                dispatch({
+                  type: OPEN_FORM_EDIT_TASK,
+                  title: "CREATE TASK",
+                  Component: FormCreateTask,
+                  SubmitFunction: () => {},
+                });
+              },
             },
             {
               key: "2",

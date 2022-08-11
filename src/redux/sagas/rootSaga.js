@@ -4,6 +4,7 @@ import * as JiraUserSaga from "./JiraSagas/JiraUserSaga";
 import * as JiraProjectCategorySaga from "./JiraSagas/JiraProjectCategorySaga";
 import * as JiraCreateProjectSaga from "./JiraSagas/JiraCreateProjectSaga";
 import * as JiraManageAllProjects from "./JiraSagas/JiraMangeProjectsSaga";
+import * as JiraMangeTaskSaga from "./JiraSagas/JiraManageTaskSaga";
 export function* rootSaga() {
   yield all([
     JiraUserSaga.theoDoiSignIn(),
@@ -16,5 +17,7 @@ export function* rootSaga() {
     JiraManageAllProjects.theoDoiDeleteProject(),
     JiraManageAllProjects.theoDoiUpdateProject(),
     JiraManageAllProjects.theoDoiGetProjectDetailByID(),
+    JiraMangeTaskSaga.theoDoiGetTaskType(),
+    JiraMangeTaskSaga.theoDoiGetTaskPriority(),
   ]);
 }

@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { JIRA_DOMAIN, TOKEN } from "../../utils/constants/settingSystem";
 class JiraServices {
+  //USER
   signIn = (userLogin) => {
     return Axios.post(`${JIRA_DOMAIN}/Users/signin`, {
       email: userLogin.username,
@@ -30,6 +31,7 @@ class JiraServices {
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
+  //PROJECTS
   getAllProjectCategory = () => {
     return Axios.get(`${JIRA_DOMAIN}/ProjectCategory`);
   };
@@ -69,6 +71,13 @@ class JiraServices {
       data: projectUpdate,
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
+  };
+  // TASK
+  getTaskType = () => {
+    return Axios.get(`${JIRA_DOMAIN}/TaskType/getAll`);
+  };
+  getTaskPriority = () => {
+    return Axios.get(`${JIRA_DOMAIN}/Priority/getAll`);
   };
 }
 

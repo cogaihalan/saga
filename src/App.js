@@ -65,7 +65,7 @@ function App() {
           path="/login"
           Component={LoginJiraWithFormik}
         ></UserLoginTemplate>
-        <JiraTemplate exact path="/" Component={MainJira}></JiraTemplate>
+        <JiraTemplate exact path="/" Component={ProjectManagement}></JiraTemplate>
         <JiraTemplate exact path="/jira" Component={MainJira}></JiraTemplate>
         <JiraTemplate
           exact

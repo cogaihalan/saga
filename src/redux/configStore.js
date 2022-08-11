@@ -11,6 +11,7 @@ import JiraProjectCategoryReducer from "./reducers/Jira/JiraProjectCategoryReduc
 import JiraManageAllProjects from "./reducers/Jira/JiraManageAllProjects";
 import JiraDrawerReducer from "./reducers/Jira/JiraDrawerReducer";
 import JiraProjectReducer from "./reducers/Jira/JiraProjectReducer";
+import JiraTaskReducer from "./reducers/Jira/JiraTaskReducer";
 const middlewareSaga = createSagaMiddleware();
 const rootReducer = combineReducers({
   ToDoListReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   JiraManageAllProjects,
   JiraDrawerReducer,
   JiraProjectReducer,
+  JiraTaskReducer,
 });
 
 const store = createStore(
