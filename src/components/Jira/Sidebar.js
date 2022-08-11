@@ -8,7 +8,7 @@ import { Layout, Menu } from "antd";
 import React, { useState } from "react";
 const { Sider } = Layout;
 export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   return (
     <div className="sidebar">
       <Sider
@@ -22,7 +22,7 @@ export default function Sidebar() {
           onClick={() => {
             setCollapsed(!collapsed);
           }}
-          className="me-2 mb-3 text-end"
+          className="me-2 mb-3 text-center"
           style={{ color: "#fff", fontSize: "20px" }}
         >
           

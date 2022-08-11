@@ -1,6 +1,6 @@
 import "./App.css";
 import TodoList from "./components/TodoList/TodoList";
-import { BrowserRouter, Switch, useHistory } from "react-router-dom";
+import { Switch, useHistory } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Detail from "./pages/Detail/Detail";
@@ -35,7 +35,7 @@ function App() {
       <JiraModal></JiraModal>
       <LoadingComponent></LoadingComponent>
       <Switch>
-        <HomeTemplate
+        {/* <HomeTemplate
           exact
           path="/todolist_thunk"
           Component={TodoListRedux}
@@ -52,20 +52,20 @@ function App() {
         ></HomeTemplate>
         <HomeTemplate exact path="/hoc" Component={DemoModal}></HomeTemplate>
         <HomeTemplate exact path="/home" Component={Home}></HomeTemplate>
-        <HomeTemplate exact path="/about" Component={About}></HomeTemplate>
-        <UserLoginTemplate
-          exact
-          path="/login"
-          Component={LoginJiraWithFormik}
-        ></UserLoginTemplate>
-        <HomeTemplate
+        <HomeTemplate exact path="/about" Component={About}></HomeTemplate> */}
+        {/* <HomeTemplate
           exact
           path="/detail/:id"
           Component={Detail}
         ></HomeTemplate>
         <HomeTemplate exact path="/profile" Component={Profile}></HomeTemplate>
-        {/* <HomeTemplate exact path="*" Component={PageNotFound}></HomeTemplate> */}
-        <HomeTemplate exact path="/" Component={Home}></HomeTemplate>
+        <HomeTemplate exact path="*" Component={PageNotFound}></HomeTemplate> */}
+        <UserLoginTemplate
+          exact
+          path="/login"
+          Component={LoginJiraWithFormik}
+        ></UserLoginTemplate>
+        <JiraTemplate exact path="/" Component={MainJira}></JiraTemplate>
         <JiraTemplate exact path="/jira" Component={MainJira}></JiraTemplate>
         <JiraTemplate
           exact
@@ -76,6 +76,11 @@ function App() {
           exact
           path="/jira/projects"
           Component={ProjectManagement}
+        ></JiraTemplate>
+        <JiraTemplate
+          exact
+          path="/jira/projects/:id"
+          Component={MainJira}
         ></JiraTemplate>
       </Switch>
     </>

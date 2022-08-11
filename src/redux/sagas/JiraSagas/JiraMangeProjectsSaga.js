@@ -8,6 +8,8 @@ import {
   DELETE_PROJECT_API,
   UPDATE_PROJECT_API,
   CLOSE_DRAWER,
+  GET_PROJECT_DETAIL_API,
+  GET_PROJECT_DETAIL,
 } from "../../types/JiraConstants";
 import { HIDE_LOADING, DISPLAY_LOADING } from "../../types/LoadingConstants";
 // Quản lý action saga
@@ -81,4 +83,25 @@ function* updateProject(action) {
 }
 export function* theoDoiUpdateProject() {
   yield takeLatest(UPDATE_PROJECT_API, updateProject);
+}
+
+function* getProjectDetailByID(action) {
+  try {
+    const { data, status } = yield call(
+      JiraService.getProjectByID,
+      action.projectID
+    );
+    console.log(data, status);
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put({
+        type: GET_PROJECT_DETAIL,
+        projectDetail: data.content,
+      });
+    }
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+export function* theoDoiGetProjectDetailByID() {
+  yield takeLatest(GET_PROJECT_DETAIL_API, getProjectDetailByID);
 }

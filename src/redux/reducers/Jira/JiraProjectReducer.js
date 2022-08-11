@@ -1,4 +1,4 @@
-import { EDIT_PROJECT } from "../../types/JiraConstants";
+import { EDIT_PROJECT, GET_PROJECT_DETAIL } from "../../types/JiraConstants";
 
 const initialState = {
   projectUpdate: {
@@ -8,12 +8,14 @@ const initialState = {
     description: "string",
     categoryId: "2",
   },
+  projectDetail: {},
 };
 const JiraProjectReducer = (state = initialState, action) => {
   switch (action.type) {
     case EDIT_PROJECT:
       return { ...state, projectUpdate: action.models };
-
+    case GET_PROJECT_DETAIL:
+      return { ...state, projectDetail: action.projectDetail };
     default:
       return state;
   }

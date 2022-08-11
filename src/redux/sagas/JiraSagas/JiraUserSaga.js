@@ -12,6 +12,7 @@ import {
   GET_ALL_PROJECTS,
   ASSIGN_USER_TO_PROJECT_API,
   GET_ALL_PROJECTS_API,
+  REMOVE_USER_FROM_PROJECT_API,
 } from "../../types/JiraConstants";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../../types/LoadingConstants";
 // Quản lý action saga
@@ -75,4 +76,23 @@ function* assignUserToProject(action) {
 }
 export function* theoDoiAssignUserToProject() {
   yield takeLatest(ASSIGN_USER_TO_PROJECT_API, assignUserToProject);
+}
+
+function* removeUserFromProject(action) {
+  try {
+    let { status } = yield call(
+      JiraService.removeUserFromProject,
+      action.userProject
+    );
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put({
+        type: GET_ALL_PROJECTS_API,
+      });
+    }
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+export function* theoDoiRemoveUserFromProject() {
+  yield takeLatest(REMOVE_USER_FROM_PROJECT_API, removeUserFromProject);
 }

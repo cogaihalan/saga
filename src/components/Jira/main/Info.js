@@ -1,6 +1,7 @@
 import React from "react";
-
-export default function Info() {
+import { Avatar } from "antd";
+export default function Info(props) {
+  const { listMembers } = props;
   return (
     <div className="info" style={{ display: "flex" }}>
       <div className="search-block">
@@ -8,15 +9,9 @@ export default function Info() {
         <i className="fa fa-search" />
       </div>
       <div className="avatar-group" style={{ display: "flex" }}>
-        <div className="avatar">
-          <img src="/Jira/download (1).jfif" alt="infoImage" />
-        </div>
-        <div className="avatar">
-          <img src="/Jira/download (2).jfif" alt="infoImage" />
-        </div>
-        <div className="avatar">
-          <img src="/Jira/download (3).jfif" alt="infoImage" />
-        </div>
+        {listMembers?.map((member, index) => {
+          return <Avatar src={member.avatar} key={index}></Avatar>
+        })}
       </div>
       <div style={{ marginLeft: 20 }} className="text">
         Only My Issues

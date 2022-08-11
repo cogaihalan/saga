@@ -9,7 +9,7 @@ import {
   AutoComplete,
 } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import HTMLReactParser from "html-react-parser";
 import {
@@ -19,10 +19,13 @@ import {
   EDIT_PROJECT,
   GET_USER_API,
   ASSIGN_USER_TO_PROJECT_API,
+  REMOVE_USER_FROM_PROJECT_API,
 } from "../../../redux/types/JiraConstants";
 import FormEditProject from "../../../components/Forms/Jira/FormEditProject";
+import { NavLink } from "react-router-dom";
 
 export default function ProjectManagement(props) {
+  const searchRef = useRef(null);
   const [userOption, setUserOption] = useState("");
   const listProjects = useSelector(
     (stateList) => stateList.JiraManageAllProjects.listProjects
@@ -48,6 +51,11 @@ export default function ProjectManagement(props) {
       title: "Project Name",
       dataIndex: "projectName",
       key: "projectName",
+      render: (projectName, record) => {
+        return (
+          <NavLink to={`/jira/projects/${record.id}`}>{projectName}</NavLink>
+        );
+      },
       sorter: (nextItem, item) => {
         const projectName1 = nextItem.projectName?.trim().toLowerCase();
         const projectName2 = item.projectName?.trim().toLowerCase();
@@ -83,11 +91,60 @@ export default function ProjectManagement(props) {
           <div>
             {members?.slice(0, 2).map((member, index) => {
               return (
-                <Avatar
-                  className="me-1"
+                <Popover
                   key={index}
-                  src={member.avatar}
-                ></Avatar>
+                  placement="bottom"
+                  title="Members"
+                  content={() => {
+                    return (
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Avatar</th>
+                            <th>Name</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((member, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{member.userId}</td>
+                                <td>
+                                  <Avatar src={member.avatar}></Avatar>
+                                </td>
+                                <td>{member.name}</td>
+                                <td>
+                                  <Button
+                                    onClick={() => {
+                                      dispatch({
+                                        type: "REMOVE_USER_FROM_PROJECT_API",
+                                        userProject: {
+                                          projectId: record.id,
+                                          userId: member.userId,
+                                        },
+                                      });
+                                    }}
+                                    className="btn btn-danger d-flex align-items-center justify-content-center"
+                                  >
+                                    <DeleteOutlined />
+                                  </Button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    );
+                  }}
+                >
+                  <Avatar
+                    className="me-1"
+                    key={index}
+                    src={member.avatar}
+                  ></Avatar>
+                </Popover>
               );
             })}
 
@@ -101,10 +158,13 @@ export default function ProjectManagement(props) {
                     options={listUsers}
                     style={{ width: 200 }}
                     onSearch={(value) => {
-                      dispatch({
-                        type: GET_USER_API,
-                        userKeyword: value,
-                      });
+                      if (searchRef.current) clearTimeout(searchRef.current);
+                      searchRef.current = setTimeout(() => {
+                        dispatch({
+                          type: GET_USER_API,
+                          userKeyword: value,
+                        });
+                      }, 450);
                     }}
                     value={userOption}
                     onChange={(value) => {

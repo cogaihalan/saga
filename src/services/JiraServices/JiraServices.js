@@ -14,6 +14,22 @@ class JiraServices {
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
+  assignUserToProject = (userProject) => {
+    return Axios({
+      url: `${JIRA_DOMAIN}/Project/assignUserProject`,
+      method: "POST",
+      data: userProject,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
+  removeUserFromProject = (userProject) => {
+    return Axios({
+      url: `${JIRA_DOMAIN}/Project/removeUserFromProject`,
+      method: "POST",
+      data: userProject,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
   getAllProjectCategory = () => {
     return Axios.get(`${JIRA_DOMAIN}/ProjectCategory`);
   };
@@ -51,14 +67,6 @@ class JiraServices {
       url: `${JIRA_DOMAIN}/Project/updateProject?projectId=${projectUpdate.id}`,
       method: "PUT",
       data: projectUpdate,
-      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
-    });
-  };
-  assignUserToProject = (userProject) => {
-    return Axios({
-      url: `${JIRA_DOMAIN}/Project/assignUserProject`,
-      method: "POST",
-      data: userProject,
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };

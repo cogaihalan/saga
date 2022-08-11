@@ -9,10 +9,12 @@ export function* rootSaga() {
     JiraUserSaga.theoDoiSignIn(),
     JiraUserSaga.theoDoiGetUsers(),
     JiraUserSaga.theoDoiAssignUserToProject(),
+    JiraUserSaga.theoDoiRemoveUserFromProject(),
     JiraProjectCategorySaga.theoDoiGetAllProjectCategory(),
     JiraCreateProjectSaga.theoDoiCreateProjectAPI(),
     JiraManageAllProjects.theoDoiGetAllProjects(),
     JiraManageAllProjects.theoDoiDeleteProject(),
     JiraManageAllProjects.theoDoiUpdateProject(),
+    JiraManageAllProjects.theoDoiGetProjectDetailByID(),
   ]);
 }
