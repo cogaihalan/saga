@@ -8,6 +8,7 @@ import {
   CREATE_TASK_API,
   GET_ALL_PROJECTS_API,
   GET_TASK_PRIORITY_API,
+  GET_TASK_STATUS_API,
   GET_TASK_TYPE_API,
   GET_USER_API,
   SET_SUBMIT_FORM,
@@ -46,14 +47,13 @@ function FormCreateTask(props) {
       type: GET_TASK_PRIORITY_API,
     });
     dispatch({
+      type: GET_TASK_STATUS_API,
+    });
+    dispatch({
       type: SET_SUBMIT_FORM,
       submitForm: handleSubmit,
     });
   }, []);
-  // Task type => type ID
-  // Priority => prioriry ID
-  // project => project ID
-  // assignee => select,option
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
@@ -81,7 +81,6 @@ function FormCreateTask(props) {
             <div className="form-group">
               <p className="mt-3 form-text">Task Name</p>
               <input
-                //   value={values.timeTrackingSpent}
                 onChange={handleChange}
                 type="text"
                 name="taskName"
