@@ -264,7 +264,7 @@ export default function ProjectManagement(props) {
           marginBottom: 16,
         }}
       ></Space>
-      <Table columns={columns} rowKey={"id"} dataSource={listProjects} />
+      <Table size="small" columns={columns} rowKey={"id"} dataSource={listProjects} />
     </div>
   );
 }

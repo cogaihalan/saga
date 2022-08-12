@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Select, Slider } from "antd";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
+  CREATE_TASK_API,
   GET_ALL_PROJECTS_API,
   GET_TASK_PRIORITY_API,
   GET_TASK_TYPE_API,
@@ -12,9 +13,8 @@ import {
   SET_SUBMIT_FORM,
 } from "../../../redux/types/JiraConstants";
 function FormCreateTask(props) {
-  const { Option } = Select;
   const dispatch = useDispatch();
-  const { listTaskType, listTaskPriority } = useSelector(
+  const { listTaskType, listTaskPriority, listTaskStatus } = useSelector(
     (stateList) => stateList.JiraTaskReducer
   );
   const { listProjects } = useSelector(
@@ -77,6 +77,18 @@ function FormCreateTask(props) {
               </select>
             </div>
           </div>
+          <div className="col-12">
+            <div className="form-group">
+              <p className="mt-3 form-text">Task Name</p>
+              <input
+                //   value={values.timeTrackingSpent}
+                onChange={handleChange}
+                type="text"
+                name="taskName"
+                className="form-control"
+              />
+            </div>
+          </div>
           <div className="col-6">
             <div className="form-group">
               <p className="mt-3 form-text">Task Type</p>
@@ -125,9 +137,8 @@ function FormCreateTask(props) {
                 options={listUsers}
                 placement="bottomLeft"
                 placeholder="Please select"
-                // onChange={handleChange}
-                onSelect={(value, option) => {
-                  console.log({ value, option });
+                onChange={(values) => {
+                  setFieldValue("listUserAsign", values);
                 }}
                 style={{ width: "100%" }}
               ></Select>
@@ -156,12 +167,12 @@ function FormCreateTask(props) {
                   <div className="form-group">
                     <p className="mt-3 form-text">Time Spent</p>
                     <input
-                      //   value={values.timeTrackingSpent}
                       onChange={(e) => {
                         setTimeTracking({
                           ...timeTracking,
                           timeTrackingSpent: e.target.value,
                         });
+                        setFieldValue("timeTrackingSpent", e.target.value);
                       }}
                       min={0}
                       type="number"
@@ -174,12 +185,12 @@ function FormCreateTask(props) {
                   <div className="form-group">
                     <p className="mt-3 form-text">Time Remaining</p>
                     <input
-                      //   value={values.timeTrackingRemaining}
                       onChange={(e) => {
                         setTimeTracking({
                           ...timeTracking,
                           timeTrackingRemaining: e.target.value,
                         });
+                        setFieldValue("timeTrackingRemaining", e.target.value);
                       }}
                       min={0}
                       type="number"
@@ -195,13 +206,32 @@ function FormCreateTask(props) {
             <div className="form-group">
               <p className="mt-3 form-text">Original Estimate</p>
               <input
+                onChange={handleChange}
                 value={values.originalEstimate}
-                defaultValue={0}
                 min={0}
                 type="number"
                 name="originalEstimate"
                 className="form-control"
               />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="form-group">
+              <p className="mt-3 form-text">Task Status</p>
+              <select
+                value={values.statusId}
+                className="form-control"
+                onChange={handleChange}
+                name="statusId"
+              >
+                {listTaskStatus.map((status, index) => {
+                  return (
+                    <option key={index} value={status.statusId}>
+                      {status.statusName}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
           </div>
         </div>
@@ -243,27 +273,35 @@ function FormCreateTask(props) {
 const CreateTaskWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: (props) => {
+    const { listTaskType, listTaskPriority, listTaskStatus } = props;
     return {
       listUserAsign: [0],
-      taskName: "string",
-      description: "string",
-      statusId: "string",
+      taskName: "",
+      description: "",
+      statusId: listTaskStatus[0]?.statusId,
       originalEstimate: 0,
       timeTrackingSpent: 0,
       timeTrackingRemaining: 0,
       projectId: 0,
-      typeId: 0,
-      priorityId: 0,
+      typeId: listTaskType[0]?.id,
+      priorityId: listTaskPriority[0]?.priorityId,
     };
   },
 
   validationSchema: Yup.object().shape({}),
   handleSubmit: (values, { props, setSubmitting }) => {
-    console.log(values);
+    props.dispatch({
+      type: CREATE_TASK_API,
+      task: values,
+    });
   },
   displayName: "Create Task Jira",
 })(FormCreateTask);
 
-const mapStatetoProps = (state) => ({});
+const mapStatetoProps = (state) => ({
+  listTaskType: state.JiraTaskReducer.listTaskType,
+  listTaskPriority: state.JiraTaskReducer.listTaskPriority,
+  listTaskStatus: state.JiraTaskReducer.listTaskStatus,
+});
 
 export default connect(mapStatetoProps)(CreateTaskWithFormik);

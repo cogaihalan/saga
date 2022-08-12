@@ -1,8 +1,13 @@
-import { GET_TASK_PRIORITY, GET_TASK_TYPE } from "../../types/JiraConstants";
+import {
+  GET_TASK_PRIORITY,
+  GET_TASK_TYPE,
+  GET_TASK_STATUS,
+} from "../../types/JiraConstants";
 
 const initialState = {
   listTaskType: [],
   listTaskPriority: [],
+  listTaskStatus: [],
 };
 
 const JiraTaskReducer = (state = initialState, action) => {
@@ -11,7 +16,8 @@ const JiraTaskReducer = (state = initialState, action) => {
       return { ...state, listTaskPriority: action.data };
     case GET_TASK_TYPE:
       return { ...state, listTaskType: action.data };
-
+    case GET_TASK_STATUS:
+      return { ...state, listTaskStatus: action.data };
     default:
       return state;
   }

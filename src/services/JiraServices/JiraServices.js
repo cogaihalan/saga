@@ -15,6 +15,12 @@ class JiraServices {
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
+  getUserByProjectId = (projectID) => {
+    return Axios({
+      url: `${JIRA_DOMAIN}/Users/getUserByProjectId?idProject=${projectID}`,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
   assignUserToProject = (userProject) => {
     return Axios({
       url: `${JIRA_DOMAIN}/Project/assignUserProject`,
@@ -73,11 +79,22 @@ class JiraServices {
     });
   };
   // TASK
+  createTask = (task) => {
+    return Axios({
+      method: "POST",
+      url: `${JIRA_DOMAIN}/Project/createTask`,
+      data: task,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
   getTaskType = () => {
     return Axios.get(`${JIRA_DOMAIN}/TaskType/getAll`);
   };
   getTaskPriority = () => {
     return Axios.get(`${JIRA_DOMAIN}/Priority/getAll`);
+  };
+  getTaskStatus = () => {
+    return Axios.get(`${JIRA_DOMAIN}/Status/getAll`);
   };
 }
 

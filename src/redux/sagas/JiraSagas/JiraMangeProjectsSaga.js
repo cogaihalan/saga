@@ -91,7 +91,6 @@ function* getProjectDetailByID(action) {
       JiraService.getProjectByID,
       action.projectID
     );
-    console.log(data, status);
     if (status === STATUS_CODE.SUCCESS) {
       yield put({
         type: GET_PROJECT_DETAIL,

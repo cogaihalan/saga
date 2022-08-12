@@ -19,5 +19,7 @@ export function* rootSaga() {
     JiraManageAllProjects.theoDoiGetProjectDetailByID(),
     JiraMangeTaskSaga.theoDoiGetTaskType(),
     JiraMangeTaskSaga.theoDoiGetTaskPriority(),
+    JiraMangeTaskSaga.theoDoiGetTaskStatus(),
+    JiraMangeTaskSaga.theoDoiCreateTask(),
   ]);
 }
