@@ -1,11 +1,37 @@
+import { Avatar } from "antd";
 import HTMLReactParser from "html-react-parser";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  GET_TASK_STATUS_API,
+  GET_TASK_TYPE_API,
+  GET_TASK_PRIORITY_API,
+  GET_COMMENT_API,
+} from "../../../redux/types/JiraConstants";
 export default function ModalInfo() {
+  const dispatch = useDispatch();
   const taskDetail = useSelector(
     (stateList) => stateList.JiraTaskReducer.taskDetail
   );
   console.log(taskDetail);
+
+  const MAX_TIME =
+    taskDetail.timeTrackingRemaining + taskDetail.timeTrackingSpent;
+  const PERCENT_TIME = (taskDetail.timeTrackingSpent / MAX_TIME) * 100;
+  const { listTaskPriority, listTaskStatus } = useSelector(
+    (stateList) => stateList.JiraTaskReducer
+  );
+  useEffect(() => {
+    dispatch({
+      type: GET_TASK_TYPE_API,
+    });
+    dispatch({
+      type: GET_TASK_PRIORITY_API,
+    });
+    dispatch({
+      type: GET_TASK_STATUS_API,
+    });
+  }, []);
   return (
     <div>
       <div
@@ -56,43 +82,32 @@ export default function ModalInfo() {
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-8">
-                    <p className="issue">This is an issue of type: Task.</p>
+                    <p className="issue">
+                      This is an issue of type:
+                      {taskDetail.taskTypeDetail?.taskType}
+                    </p>
                     <div className="description">
                       <p>Description</p>
-                      <p>{HTMLReactParser(taskDetail.description)}</p>
+                      <p>{/* {HTMLReactParser(taskDetail.description)} */}</p>
                     </div>
-                    <div style={{ fontWeight: 500, marginBottom: 10 }}>
-                      Jira Software (software projects) issue types:
-                    </div>
-                    {/* <div className="title">
-                      <div className="title-item">
-                        <h3>
-                          BUG <i className="fa fa-bug" />
-                        </h3>
-                        <p>
-                          A bug is a problem which impairs or prevents the
-                          function of a product.
-                        </p>
-                      </div>
-                      <div className="title-item">
-                        <h3>
-                          STORY <i className="fa fa-book-reader" />
-                        </h3>
-                        <p>
-                          A user story is the smallest unit of work that needs
-                          to be done.
-                        </p>
-                      </div>
-                      <div className="title-item">
-                        <h3>
-                          TASK <i className="fa fa-tasks" />
-                        </h3>
-                        <p>A task represents work that needs to be done</p>
-                      </div>
-                    </div> */}
-                    <div className="comment">
+
+                    <div className="comment mt-5">
                       <h6>Comment</h6>
-                      <div
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          dispatch({
+                            type: GET_COMMENT_API,
+                            taskID: taskDetail.taskId,
+                          });
+                        }}
+                      >
+                        GET COMMENT
+                      </button>
+                      {/* {taskDetail?.lstComment.map((comment ,index)=>{
+                        return
+                      })} */}
+                      {/* <div
                         className="block-comment"
                         style={{ display: "flex" }}
                       >
@@ -148,7 +163,7 @@ export default function ModalInfo() {
                                 voluptatum saepe ab officiis alias totam ad
                                 accusamus molestiae?
                               </p>
-                              <div className="task-btns">
+                              <div className="task-btns mt-4">
                                 <button className="btn btn-primary me-2">
                                   Edit
                                 </button>
@@ -160,37 +175,41 @@ export default function ModalInfo() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="col-4">
                     <div className="status">
                       <h6>STATUS</h6>
                       <select className="custom-select">
-                        <option value="">SELECTED FOR DEVELOPMENT</option>
-                        <option value={1}>One</option>
-                        <option value={2}>Two</option>
-                        <option value={3}>Three</option>
+                        {listTaskStatus?.map((status, index) => {
+                          return (
+                            <option key={index} value={status.statusId}>
+                              {status.statusName}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                     <div className="assignees">
                       <h6>ASSIGNEES</h6>
-                      <div style={{ display: "flex" }}>
-                        <div style={{ display: "flex" }} className="item">
-                          <div className="avatar">
-                            <img
-                              src="/Jira/download (1).jfif"
-                              alt="avatarImage"
-                            />
-                          </div>
-                          <p className="name">
-                            Pickle Rick
-                            <i
-                              className="fa fa-times"
-                              style={{ marginLeft: 5 }}
-                            />
-                          </p>
-                        </div>
+                      <div className="d-flex align-items-center">
+                        {/* {taskDetail?.assigness.map((assignee, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="item d-flex align-items-center"
+                            >
+                              <Avatar src={assignee.avatar}></Avatar>
+
+                              <i
+                                className="fa fa-times"
+                                style={{ marginLeft: 5 }}
+                              />
+                            </div>
+                          );
+                        })} */}
+
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <i
                             className="fa fa-plus"
@@ -200,7 +219,7 @@ export default function ModalInfo() {
                         </div>
                       </div>
                     </div>
-                    <div className="reporter">
+                    {/* <div className="reporter">
                       <h6>REPORTER</h6>
                       <div style={{ display: "flex" }} className="item">
                         <div className="avatar">
@@ -217,19 +236,26 @@ export default function ModalInfo() {
                           />
                         </p>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="priority" style={{ marginBottom: 20 }}>
                       <h6>PRIORITY</h6>
-                      <select>
-                        <option>Highest</option>
-                        <option>Medium</option>
-                        <option>Low</option>
-                        <option>Lowest</option>
+                      <select className="custom-select">
+                        {listTaskPriority?.map((priority, index) => {
+                          return (
+                            <option key={index} value={priority.priorityId}>
+                              {priority.priority}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                     <div className="estimate">
                       <h6>ORIGINAL ESTIMATE (HOURS)</h6>
-                      <input type="text" className="estimate-hours" />
+                      <input
+                        type="text"
+                        className="estimate-hours"
+                        value={taskDetail?.originalEstimate}
+                      />
                     </div>
                     <div className="time-tracking">
                       <h6>TIME TRACKING</h6>
@@ -240,10 +266,10 @@ export default function ModalInfo() {
                             <div
                               className="progress-bar"
                               role="progressbar"
-                              style={{ width: "25%" }}
-                              aria-valuenow={25}
+                              style={{ width: `${PERCENT_TIME}%` }}
+                              aria-valuenow={PERCENT_TIME}
                               aria-valuemin={0}
-                              aria-valuemax={100}
+                              aria-valuemax={MAX_TIME}
                             />
                           </div>
                           <div
@@ -252,8 +278,12 @@ export default function ModalInfo() {
                               justifyContent: "space-between",
                             }}
                           >
-                            <p className="logged">4h logged</p>
-                            <p className="estimate-time">12h estimated</p>
+                            <p className="logged">
+                              {taskDetail?.timeTrackingSpent}h logged
+                            </p>
+                            <p className="estimate-time">
+                              {taskDetail?.timeTrackingRemaining}h remaining
+                            </p>
                           </div>
                         </div>
                       </div>

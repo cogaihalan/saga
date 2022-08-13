@@ -432,23 +432,17 @@ p {
   font-size: 13px;
 }
 
-.status .custom-select {
+.custom-select {
   height: 35px;
-  background: #dcdfe4;
   margin-bottom: 20px;
+  min-width: 100%;
 }
 
 .item {
-  margin-right: 20px;
+  margin-right: 10px;
   background: #e9eaf0;
   padding: 5px;
-  border-radius: 5px;
-  flex-basis: 50%;
-}
-
-.item .avatar img {
-  width: 30px;
-  height: 30px;
+  border-radius: 8px;
 }
 
 .item .name {

@@ -201,7 +201,9 @@ export default function ProjectManagement(props) {
       dataIndex: "description",
       key: "description",
       render: (text, index) => {
-        return <div key={index}>{HTMLReactParser(text)}</div>;
+        return <div key={index}>
+        {HTMLReactParser(text)}
+        </div>;
       },
     },
     {

@@ -5,6 +5,7 @@ import * as JiraProjectCategorySaga from "./JiraSagas/JiraProjectCategorySaga";
 import * as JiraCreateProjectSaga from "./JiraSagas/JiraCreateProjectSaga";
 import * as JiraManageAllProjects from "./JiraSagas/JiraMangeProjectsSaga";
 import * as JiraMangeTaskSaga from "./JiraSagas/JiraManageTaskSaga";
+import * as JiraManageCommentSaga from "./JiraSagas/JiraManageCommentSaga";
 export function* rootSaga() {
   yield all([
     JiraUserSaga.theoDoiSignIn(),
@@ -23,5 +24,6 @@ export function* rootSaga() {
     JiraMangeTaskSaga.theoDoiGetTaskStatus(),
     JiraMangeTaskSaga.theoDoiCreateTask(),
     JiraMangeTaskSaga.theoDoiGetTaskDetail(),
+    JiraManageCommentSaga.theoDoiGetComment(),
   ]);
 }

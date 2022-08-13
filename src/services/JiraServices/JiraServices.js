@@ -103,6 +103,34 @@ class JiraServices {
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
+  //COMMENT
+  getComment = (taskID) => {
+    return Axios.get(`${JIRA_DOMAIN}/Comment/getAll?taskId=${taskID}`);
+  };
+  insertComment = (comment) => {
+    // comment {
+    //   "taskId": 0,
+    //   "contentComment": "string"
+    // }
+    return Axios({
+      method: "POST",
+      url: `${JIRA_DOMAIN}/Comment/insertComment`,
+      data: comment,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
+  updateComment = ({ id, contentComment }) => {
+    return Axios({
+      method: "PUT",
+      url: `${JIRA_DOMAIN}/Comment/updateComment?id=${id}&contentComment=${contentComment}`,
+    });
+  };
+  deleteComment = (idComment) => {
+    return Axios({
+      method: "DELETE",
+      url: `${JIRA_DOMAIN}/Comment/deleteComment?idComment=${idComment}`,
+    });
+  };
 }
 
 export const JiraService = new JiraServices();
