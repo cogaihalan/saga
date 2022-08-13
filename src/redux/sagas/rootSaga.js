@@ -9,6 +9,7 @@ export function* rootSaga() {
   yield all([
     JiraUserSaga.theoDoiSignIn(),
     JiraUserSaga.theoDoiGetUsers(),
+    JiraUserSaga.theoDoiGetUsersByProjectId(),
     JiraUserSaga.theoDoiAssignUserToProject(),
     JiraUserSaga.theoDoiRemoveUserFromProject(),
     JiraProjectCategorySaga.theoDoiGetAllProjectCategory(),
@@ -21,5 +22,6 @@ export function* rootSaga() {
     JiraMangeTaskSaga.theoDoiGetTaskPriority(),
     JiraMangeTaskSaga.theoDoiGetTaskStatus(),
     JiraMangeTaskSaga.theoDoiCreateTask(),
+    JiraMangeTaskSaga.theoDoiGetTaskDetail(),
   ]);
 }

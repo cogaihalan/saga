@@ -10,6 +10,7 @@ import {
   CLOSE_DRAWER,
   GET_PROJECT_DETAIL_API,
   GET_PROJECT_DETAIL,
+  GET_USER_BY_PROJECT_ID,
 } from "../../types/JiraConstants";
 import { HIDE_LOADING, DISPLAY_LOADING } from "../../types/LoadingConstants";
 // Quản lý action saga
@@ -21,6 +22,10 @@ function* getAllProjects(action) {
       yield put({
         type: GET_ALL_PROJECTS,
         data: data.content,
+      });
+      yield put({
+        type: GET_USER_BY_PROJECT_ID,
+        listUsersByID: data.content[0].members,
       });
     }
   } catch (err) {

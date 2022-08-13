@@ -15,7 +15,7 @@ class JiraServices {
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
-  getUserByProjectId = (projectID) => {
+  getUsersByProjectId = (projectID) => {
     return Axios({
       url: `${JIRA_DOMAIN}/Users/getUserByProjectId?idProject=${projectID}`,
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
@@ -95,6 +95,13 @@ class JiraServices {
   };
   getTaskStatus = () => {
     return Axios.get(`${JIRA_DOMAIN}/Status/getAll`);
+  };
+  getTaskDetail = (taskID) => {
+    return Axios({
+      method: "GET",
+      url: `${JIRA_DOMAIN}/Project/getTaskDetail?taskId=${taskID}`,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
   };
 }
 

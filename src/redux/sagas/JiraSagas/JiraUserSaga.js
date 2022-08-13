@@ -12,6 +12,8 @@ import {
   ASSIGN_USER_TO_PROJECT_API,
   GET_ALL_PROJECTS_API,
   REMOVE_USER_FROM_PROJECT_API,
+  GET_USER_BY_PROJECT_ID,
+  GET_USER_BY_PROJECT_ID_API,
 } from "../../types/JiraConstants";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../../types/LoadingConstants";
 // Quản lý action saga
@@ -94,4 +96,29 @@ function* removeUserFromProject(action) {
 }
 export function* theoDoiRemoveUserFromProject() {
   yield takeLatest(REMOVE_USER_FROM_PROJECT_API, removeUserFromProject);
+}
+
+function* getUsersByProjectId(action) {
+  try {
+    let { data, status } = yield call(
+      JiraService.getUsersByProjectId,
+      action.idProject
+    );
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put({
+        type: GET_USER_BY_PROJECT_ID,
+        listUsersByID: data.content,
+      });
+    }
+  } catch (err) {
+    if (err.response.data.statusCode === STATUS_CODE.NOT_FOUND) {
+      yield put({
+        type: GET_USER_BY_PROJECT_ID,
+        listUsersByID: [],
+      });
+    }
+  }
+}
+export function* theoDoiGetUsersByProjectId() {
+  yield takeLatest(GET_USER_BY_PROJECT_ID_API, getUsersByProjectId);
 }

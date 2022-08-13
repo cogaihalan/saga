@@ -3,8 +3,9 @@ import { JiraService } from "../../../services/JiraServices/JiraServices";
 import { STATUS_CODE } from "../../../utils/constants/settingSystem";
 import {
   CLOSE_DRAWER,
-  CREATE_TASK,
   CREATE_TASK_API,
+  GET_TASK_DETAIL,
+  GET_TASK_DETAIL_API,
   GET_TASK_PRIORITY,
   GET_TASK_PRIORITY_API,
   GET_TASK_STATUS,
@@ -14,7 +15,6 @@ import {
 } from "../../types/JiraConstants";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../../types/LoadingConstants";
 import { Notification } from "../../../utils/notification/Notification";
-import { act } from "react-dom/test-utils";
 // Quản lý action saga
 function* getTaskType(action) {
   try {
@@ -90,4 +90,24 @@ function* getTaskStatus(action) {
 }
 export function* theoDoiGetTaskStatus() {
   yield takeLatest(GET_TASK_STATUS_API, getTaskStatus);
+}
+
+function* getTaskDetail(action) {
+  try {
+    const { data, status } = yield call(
+      JiraService.getTaskDetail,
+      action.taskID
+    );
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put({
+        type: GET_TASK_DETAIL,
+        data: data.content,
+      });
+    }
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+export function* theoDoiGetTaskDetail() {
+  yield takeLatest(GET_TASK_DETAIL_API, getTaskDetail);
 }

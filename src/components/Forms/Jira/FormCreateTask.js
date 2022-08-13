@@ -11,6 +11,7 @@ import {
   GET_TASK_STATUS_API,
   GET_TASK_TYPE_API,
   GET_USER_API,
+  GET_USER_BY_PROJECT_ID_API,
   SET_SUBMIT_FORM,
 } from "../../../redux/types/JiraConstants";
 function FormCreateTask(props) {
@@ -22,7 +23,7 @@ function FormCreateTask(props) {
     (stateList) => stateList.JiraManageAllProjects
   );
   const listUsers = useSelector(
-    (stateList) => stateList.JiraUserLoginReducer.listUsers
+    (stateList) => stateList.JiraUserLoginReducer.listUsersByID
   ).map((user) => ({ label: user.name, value: user.userId }));
   const [timeTracking, setTimeTracking] = useState({
     timeTrackingSpent: 0,
@@ -54,6 +55,7 @@ function FormCreateTask(props) {
       submitForm: handleSubmit,
     });
   }, []);
+
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
@@ -64,7 +66,15 @@ function FormCreateTask(props) {
               <select
                 className="form-control"
                 value={values.projectId}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setFieldValue("projectId", e.target.value);
+                  dispatch({
+                    type: GET_USER_BY_PROJECT_ID_API,
+                    idProject: Number(e.target.value),
+                  });
+                  setFieldValue("listUserAsign", []);
+                  console.log(values.listUserAsign);
+                }}
                 name="projectId"
               >
                 {listProjects.map((project, index) => {
@@ -81,6 +91,7 @@ function FormCreateTask(props) {
             <div className="form-group">
               <p className="mt-3 form-text">Task Name</p>
               <input
+                //   value={values.timeTrackingSpent}
                 onChange={handleChange}
                 type="text"
                 name="taskName"
@@ -272,7 +283,8 @@ function FormCreateTask(props) {
 const CreateTaskWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: (props) => {
-    const { listTaskType, listTaskPriority, listTaskStatus } = props;
+    const { listProjects, listTaskType, listTaskPriority, listTaskStatus } =
+      props;
     return {
       listUserAsign: [0],
       taskName: "",
@@ -281,7 +293,7 @@ const CreateTaskWithFormik = withFormik({
       originalEstimate: 0,
       timeTrackingSpent: 0,
       timeTrackingRemaining: 0,
-      projectId: 0,
+      projectId: listProjects[0]?.id,
       typeId: listTaskType[0]?.id,
       priorityId: listTaskPriority[0]?.priorityId,
     };
@@ -298,6 +310,7 @@ const CreateTaskWithFormik = withFormik({
 })(FormCreateTask);
 
 const mapStatetoProps = (state) => ({
+  listProjects: state.JiraManageAllProjects.listProjects,
   listTaskType: state.JiraTaskReducer.listTaskType,
   listTaskPriority: state.JiraTaskReducer.listTaskPriority,
   listTaskStatus: state.JiraTaskReducer.listTaskStatus,

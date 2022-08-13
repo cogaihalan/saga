@@ -1,6 +1,11 @@
-import React from "react";
-
+import HTMLReactParser from "html-react-parser";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 export default function ModalInfo() {
+  const taskDetail = useSelector(
+    (stateList) => stateList.JiraTaskReducer.taskDetail
+  );
+  console.log(taskDetail);
   return (
     <div>
       <div
@@ -16,7 +21,9 @@ export default function ModalInfo() {
             <div className="modal-header">
               <div className="task-title">
                 <i className="fa fa-bookmark" />
-                <span>TASK-217871</span>
+                <span>
+                  TASK {taskDetail.taskId}: {taskDetail.taskName}
+                </span>
               </div>
               <div style={{ display: "flex" }} className="task-clicks">
                 <div className="task-click">
@@ -40,7 +47,7 @@ export default function ModalInfo() {
                     data-bs-dismiss="modal"
                     aria-label="Close"
                   >
-                    <i className="  fa fa-times"></i>
+                    <i className=" fa fa-times"></i>
                   </button>
                 </div>
               </div>
@@ -52,23 +59,12 @@ export default function ModalInfo() {
                     <p className="issue">This is an issue of type: Task.</p>
                     <div className="description">
                       <p>Description</p>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Esse expedita quis vero tempora error sed
-                        reprehenderit sequi laborum, repellendus quod laudantium
-                        tenetur nobis modi reiciendis sint architecto. Autem
-                        libero quibusdam odit assumenda fugiat? Beatae aliquid
-                        labore vitae obcaecati sapiente asperiores quia amet id
-                        aut, natus quo molestiae quod voluptas, temporibus iusto
-                        laudantium sit tempora sequi. Rem, itaque id, fugit
-                        magnam asperiores voluptas consectetur aliquid vel error
-                        illum, delectus eum eveniet laudantium at repudiandae!
-                      </p>
+                      <p>{HTMLReactParser(taskDetail.description)}</p>
                     </div>
                     <div style={{ fontWeight: 500, marginBottom: 10 }}>
                       Jira Software (software projects) issue types:
                     </div>
-                    <div className="title">
+                    {/* <div className="title">
                       <div className="title-item">
                         <h3>
                           BUG <i className="fa fa-bug" />
@@ -93,7 +89,7 @@ export default function ModalInfo() {
                         </h3>
                         <p>A task represents work that needs to be done</p>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="comment">
                       <h6>Comment</h6>
                       <div
