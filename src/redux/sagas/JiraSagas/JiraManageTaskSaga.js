@@ -172,21 +172,6 @@ function* handleChangeAndPostTaskDetail(action) {
   } catch (err) {
     console.log(err);
   }
-  // {
-  //   "listUserAsign": [
-  //     0
-  //   ],
-  //   "taskId": "string",
-  //   "taskName": "string",
-  //   "description": "string",
-  //   "statusId": "string",
-  //   "originalEstimate": 0,
-  //   "timeTrackingSpent": 0,
-  //   "timeTrackingRemaining": 0,
-  //   "projectId": 0,
-  //   "typeId": 0,
-  //   "priorityId": 0
-  // }
 }
 
 export function* theoDoiHandleChangeAndPostTaskDetail() {

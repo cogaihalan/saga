@@ -21,6 +21,7 @@ import CreateProjectWithFormik from "./pages/JiraClone/CreateProject/CreateProje
 import ProjectManagement from "./pages/JiraClone/ProjectManagement/ProjectManagement";
 import JiraModal from "./HOC/JIra/JiraModal";
 import DragDrop from "./pages/DragDrop/DragDrop";
+import DnDLibrary from "./pages/DragDrop/DnDLibrary";
 function App() {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ function App() {
           path="/dragdrop"
           Component={DragDrop}
         ></HomeTemplate>
-
+        <HomeTemplate exact path="/DnD" Component={DnDLibrary}></HomeTemplate>
         {/* <HomeTemplate
           exact
           path="/todolist_thunk"
