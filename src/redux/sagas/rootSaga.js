@@ -24,7 +24,7 @@ export function* rootSaga() {
     JiraMangeTaskSaga.theoDoiGetTaskStatus(),
     JiraMangeTaskSaga.theoDoiCreateTask(),
     JiraMangeTaskSaga.theoDoiGetTaskDetail(),
-    JiraMangeTaskSaga.theoDoiUpdateTaskDetail(),
+    JiraMangeTaskSaga.theoDoiHandleChangeAndPostTaskDetail(),
     JiraManageCommentSaga.theoDoiGetComment(),
   ]);
 }

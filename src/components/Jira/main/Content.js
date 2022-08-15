@@ -26,7 +26,7 @@ export default function Content(props) {
         onClick={() => {
           dispatch({
             type: GET_TASK_DETAIL_API,
-            taskID: 5276,
+            taskID: 5277,
           });
         }}
         data-bs-toggle="modal"

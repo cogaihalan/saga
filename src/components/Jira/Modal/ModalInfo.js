@@ -1,5 +1,5 @@
 import { Editor } from "@tinymce/tinymce-react";
-import { Avatar } from "antd";
+import { Avatar, Select } from "antd";
 import HTMLReactParser from "html-react-parser";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,32 +8,54 @@ import {
   GET_TASK_TYPE_API,
   GET_TASK_PRIORITY_API,
   GET_COMMENT_API,
+  UPDATE_TASK_DETAIL,
   UPDATE_TASK_DETAIL_API,
+  UPDATE_DESCRIPTION_TASK,
+  CHANGE_ASSIGNESS,
+  REMOVE_ASSIGNESS,
 } from "../../../redux/types/JiraConstants";
 export default function ModalInfo() {
   const dispatch = useDispatch();
   const taskDetail = useSelector(
     (stateList) => stateList.JiraTaskReducer.taskDetail
   );
+  const { projectDetail } = useSelector(
+    (stateList) => stateList.JiraProjectReducer
+  );
+  const handleChange = (e) => {
+    let { value, name } = e.target;
+    dispatch({
+      type: UPDATE_TASK_DETAIL_API,
+      actionType: UPDATE_TASK_DETAIL,
+      updateTask: { ...taskDetail, [name]: value },
+    });
+  };
+  const listAssignees = projectDetail.members
+    ?.filter((member) => {
+      let index = taskDetail?.assigness.findIndex(
+        (assignee) => assignee.id === member.userId
+      );
+      if (index !== -1) {
+        return false;
+      }
+      return true;
+    })
+    .map((mem) => {
+      return { value: mem.userId, label: mem.name };
+    });
+  const MAX_TIME =
+    Number(taskDetail.timeTrackingRemaining) +
+    Number(taskDetail.timeTrackingSpent);
+  const PERCENT_TIME = (+taskDetail.timeTrackingSpent / MAX_TIME) * 100;
+  const { listTaskPriority, listTaskStatus } = useSelector(
+    (stateList) => stateList.JiraTaskReducer
+  );
   const [state, setState] = useState({
     visible: true,
     prevContent: taskDetail?.description,
     currContent: "",
   });
-  const handleChange = (e) => {
-    let { value, name } = e.target;
-    dispatch({
-      type: UPDATE_TASK_DETAIL_API,
-      updateTask: { ...taskDetail, [name]: value },
-      projectID: taskDetail.projectId,
-    });
-  };
-  const MAX_TIME =
-    taskDetail.timeTrackingRemaining + taskDetail.timeTrackingSpent;
-  const PERCENT_TIME = (taskDetail.timeTrackingSpent / MAX_TIME) * 100;
-  const { listTaskPriority, listTaskStatus } = useSelector(
-    (stateList) => stateList.JiraTaskReducer
-  );
+
   useEffect(() => {
     dispatch({
       type: GET_TASK_TYPE_API,
@@ -94,36 +116,85 @@ export default function ModalInfo() {
                   <div className="col-8">
                     <p className="issue">
                       This is an issue of type:
-                      {taskDetail.taskTypeDetail?.taskType}
+                      <span className="ms-1 text text-danger">
+                        {taskDetail.taskTypeDetail?.taskType}
+                      </span>
                     </p>
-                    <div className="description">
+                    <div className="description title">
                       <p>Description</p>
-                      <p>{HTMLReactParser(taskDetail.description)}</p>
-                      <Editor
-                        value={taskDetail.description}
-                        // onEditorChange={handleChange}
-                        name="description"
-                        initialValue={taskDetail.description}
-                        init={{
-                          height: 420,
-                          menubar: false,
-                          plugins: [
-                            "advlist autolink lists link image charmap print preview anchor",
-                            "searchreplace visualblocks code fullscreen",
-                            "insertdatetime media table paste code help wordcount",
-                          ],
-                          toolbar:
-                            "undo redo | formatselect | " +
-                            "bold italic backcolor | alignleft aligncenter " +
-                            "alignright alignjustify | bullist numlist outdent indent | " +
-                            "removeformat | help",
-                          content_style:
-                            "body { font-family:Poppins,Arial,sans-serif; font-size:16px }",
-                        }}
-                      />
+                      {state.visible ? (
+                        <div
+                          onClick={() => {
+                            setState({ ...state, visible: false });
+                          }}
+                        >
+                          {HTMLReactParser(state.prevContent)}
+                        </div>
+                      ) : (
+                        <div>
+                          <Editor
+                            onEditorChange={(content) => {
+                              setState({ ...state, currContent: content });
+                            }}
+                            name="description"
+                            initialValue={state.prevContent}
+                            init={{
+                              height: 420,
+                              menubar: false,
+                              plugins: [
+                                "advlist autolink lists link image charmap print preview anchor",
+                                "searchreplace visualblocks code fullscreen",
+                                "insertdatetime media table paste code help wordcount",
+                              ],
+                              toolbar:
+                                "undo redo | formatselect | " +
+                                "bold italic backcolor | alignleft aligncenter " +
+                                "alignright alignjustify | bullist numlist outdent indent | " +
+                                "removeformat | help",
+                              content_style:
+                                "body { font-family:Poppins,Arial,sans-serif; font-size:16px }",
+                            }}
+                          />
+                          <div className="button-group mt-2">
+                            <button
+                              className="btn btn-primary me-2"
+                              onClick={() => {
+                                dispatch({
+                                  type: UPDATE_TASK_DETAIL_API,
+                                  actionType: UPDATE_DESCRIPTION_TASK,
+                                  updateTask: {
+                                    ...taskDetail,
+                                    description: state.currContent,
+                                  },
+                                });
+                                setState({
+                                  ...state,
+                                  visible: true,
+                                  prevContent: state.currContent,
+                                  currContent: "",
+                                });
+                              }}
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => {
+                                setState({
+                                  ...state,
+                                  visible: true,
+                                  currContent: "",
+                                });
+                              }}
+                              className="btn btn-secondary"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="comment mt-5">
+                    <div className="comment title mt-5">
                       <h6>Comment</h6>
                       {/* <button
                         className="btn btn-primary"
@@ -215,7 +286,7 @@ export default function ModalInfo() {
                     </div>
                   </div>
                   <div className="col-4">
-                    <div className="status">
+                    <div className="status title">
                       <h6>STATUS</h6>
                       <select
                         value={taskDetail.statusId}
@@ -232,10 +303,10 @@ export default function ModalInfo() {
                         })}
                       </select>
                     </div>
-                    <div className="assignees">
+                    <div className="assignees title">
                       <h6>ASSIGNEES</h6>
                       <div className="d-flex align-items-center">
-                        {/* {taskDetail?.assigness.map((assignee, index) => {
+                        {taskDetail.assigness.map((assignee, index) => {
                           return (
                             <div
                               key={index}
@@ -244,44 +315,48 @@ export default function ModalInfo() {
                               <Avatar src={assignee.avatar}></Avatar>
 
                               <i
+                                onClick={() => {
+                                  dispatch({
+                                    type: UPDATE_TASK_DETAIL_API,
+                                    actionType: REMOVE_ASSIGNESS,
+                                    userID: assignee.id,
+                                  });
+                                }}
                                 className="fa fa-times"
                                 style={{ marginLeft: 5 }}
                               />
                             </div>
                           );
-                        })} */}
-
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <i
-                            className="fa fa-plus"
-                            style={{ marginRight: 5 }}
-                          />
-                          <span>Add more</span>
-                        </div>
+                        })}
+                        <Select
+                          style={{ width: "100%" }}
+                          options={listAssignees}
+                          placeholder="Select a person"
+                          optionFilterProp="label"
+                          onSelect={(value) => {
+                            let userSelected = projectDetail.members.find(
+                              (mem) => mem.userId === Number(value)
+                            );
+                            userSelected = {
+                              ...userSelected,
+                              id: userSelected.userId,
+                            };
+                            dispatch({
+                              type: UPDATE_TASK_DETAIL_API,
+                              actionType: CHANGE_ASSIGNESS,
+                              userSelected,
+                            });
+                          }}
+                        ></Select>
                       </div>
                     </div>
-                    {/* <div className="reporter">
-                      <h6>REPORTER</h6>
-                      <div style={{ display: "flex" }} className="item">
-                        <div className="avatar">
-                          <img
-                            src="/Jira/download (1).jfif"
-                            alt="avatarImage"
-                          />
-                        </div>
-                        <p className="name">
-                          Pickle Rick
-                          <i
-                            className="fa fa-times"
-                            style={{ marginLeft: 5 }}
-                          />
-                        </p>
-                      </div>
-                    </div> */}
-                    <div className="priority" style={{ marginBottom: 20 }}>
+                    <div
+                      className="priority title"
+                      style={{ marginBottom: 20 }}
+                    >
                       <h6>PRIORITY</h6>
                       <select
-                        value={taskDetail.projectId}
+                        value={taskDetail.priorityId}
                         name="priorityId"
                         onChange={handleChange}
                         className="custom-select form-control"
@@ -295,17 +370,18 @@ export default function ModalInfo() {
                         })}
                       </select>
                     </div>
-                    <div className="estimate">
+                    <div className="estimate title">
                       <h6>ORIGINAL ESTIMATE (HOURS)</h6>
                       <input
                         name="originalEstimate"
                         onChange={handleChange}
-                        type="text"
+                        type="number"
+                        min={0}
                         className="estimate-hours form-control"
                         value={taskDetail?.originalEstimate}
                       />
                     </div>
-                    <div className="time-tracking">
+                    <div className="time-tracking title">
                       <h6>TIME TRACKING</h6>
                       <div style={{ display: "flex" }}>
                         <i className="fa fa-clock" />
@@ -344,6 +420,7 @@ export default function ModalInfo() {
                       }}
                     >
                       <input
+                        min={0}
                         type="number"
                         value={taskDetail?.timeTrackingSpent}
                         name="timeTrackingSpent"
@@ -352,6 +429,7 @@ export default function ModalInfo() {
                       />
 
                       <input
+                        min={0}
                         type="number"
                         value={taskDetail?.timeTrackingRemaining}
                         name="timeTrackingRemaining"

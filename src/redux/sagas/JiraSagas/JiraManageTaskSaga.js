@@ -1,7 +1,8 @@
-import { call, takeLatest, put, delay } from "redux-saga/effects";
+import { call, takeLatest, put, delay, select } from "redux-saga/effects";
 import { JiraService } from "../../../services/JiraServices/JiraServices";
 import { STATUS_CODE } from "../../../utils/constants/settingSystem";
 import {
+  CHANGE_ASSIGNESS,
   CLOSE_DRAWER,
   CREATE_TASK_API,
   GET_PROJECT_DETAIL_API,
@@ -13,6 +14,9 @@ import {
   GET_TASK_STATUS_API,
   GET_TASK_TYPE,
   GET_TASK_TYPE_API,
+  REMOVE_ASSIGNESS,
+  UPDATE_DESCRIPTION_TASK,
+  UPDATE_TASK_DETAIL,
   // UPDATE_TASK_DETAIL,
   UPDATE_TASK_DETAIL_API,
 } from "../../types/JiraConstants";
@@ -115,27 +119,76 @@ export function* theoDoiGetTaskDetail() {
   yield takeLatest(GET_TASK_DETAIL_API, getTaskDetail);
 }
 
-function* updateTaskDetail(action) {
+function* handleChangeAndPostTaskDetail(action) {
+  switch (action.actionType) {
+    case UPDATE_TASK_DETAIL:
+      yield put({
+        type: UPDATE_TASK_DETAIL,
+        updateTask: action.updateTask,
+      });
+      break;
+    case UPDATE_DESCRIPTION_TASK:
+      yield put({
+        type: UPDATE_TASK_DETAIL,
+        updateTask: action.updateTask,
+      });
+      break;
+    case CHANGE_ASSIGNESS:
+      yield put({
+        type: CHANGE_ASSIGNESS,
+        newAssignee: action.userSelected,
+      });
+      break;
+    case REMOVE_ASSIGNESS:
+      yield put({
+        type: REMOVE_ASSIGNESS,
+        userID: action.userID,
+      });
+      break;
+    default:
+      throw new Error("Invalid action type !");
+  }
+  const { taskDetail } = yield select((state) => state.JiraTaskReducer);
+  const listUserAsign = taskDetail.assigness.map((assignee) => assignee.id);
+  const taskUpdateDetail = {
+    ...taskDetail,
+    listUserAsign,
+  };
   try {
-    const { data, status } = yield call(
+    const { status } = yield call(
       JiraService.updateTaskDetail,
-      action.updateTask
+      taskUpdateDetail
     );
-
     if (status === STATUS_CODE.SUCCESS) {
       yield put({
-        type: GET_TASK_DETAIL,
-        data: data.content,
+        type: GET_PROJECT_DETAIL_API,
+        projectID: taskUpdateDetail.projectId,
       });
       yield put({
-        type: GET_PROJECT_DETAIL_API,
-        projectID: action.projectID,
+        type: GET_TASK_DETAIL_API,
+        taskID: taskUpdateDetail.taskId,
       });
     }
   } catch (err) {
-    throw new Error(err);
+    console.log(err);
   }
+  // {
+  //   "listUserAsign": [
+  //     0
+  //   ],
+  //   "taskId": "string",
+  //   "taskName": "string",
+  //   "description": "string",
+  //   "statusId": "string",
+  //   "originalEstimate": 0,
+  //   "timeTrackingSpent": 0,
+  //   "timeTrackingRemaining": 0,
+  //   "projectId": 0,
+  //   "typeId": 0,
+  //   "priorityId": 0
+  // }
 }
-export function* theoDoiUpdateTaskDetail() {
-  yield takeLatest(UPDATE_TASK_DETAIL_API, updateTaskDetail);
+
+export function* theoDoiHandleChangeAndPostTaskDetail() {
+  yield takeLatest(UPDATE_TASK_DETAIL_API, handleChangeAndPostTaskDetail);
 }

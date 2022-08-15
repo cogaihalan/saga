@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Header() {
   return (
-    <div className="header">
+    <div className="header mt-3">
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb" style={{ backgroundColor: "white" }}>
           <li className="breadcrumb-item">Project</li>

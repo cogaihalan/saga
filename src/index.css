@@ -6,9 +6,16 @@
 td {
   vertical-align: middle;
 }
+.card {
+  box-shadow: none !important;
+}
 .btn:focus {
   box-shadow: none !important;
   outline: none;
+}
+.search-block .form-control {
+  margin-top: 0;
+  padding-left: 18%;
 }
 .form-control:focus {
   box-shadow: none !important;
@@ -229,7 +236,8 @@ p {
 .main .info .search-block .fa-search {
   position: absolute;
   left: 5%;
-  top: 15%;
+  top: 50%;
+  transform: translateY(-50%);
   color: #67748b;
 }
 
@@ -267,8 +275,8 @@ p {
 
 .main .content .card .card-header {
   border: none;
-  background-color: transparent;
-  color: #5e6c84;
+  color: #315fae;
+  font-weight: 700;
 }
 
 .main .content .card .list-group {
@@ -403,9 +411,11 @@ p {
   justify-content: center;
 }
 
-.modal-info .modal-body .issue {
-  font-size: 20px;
-  font-weight: 500;
+.modal-info .modal-body .issue,
+.title h6 {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .modal-info .modal-body .description p:first-child {

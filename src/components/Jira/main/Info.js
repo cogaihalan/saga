@@ -5,12 +5,12 @@ export default function Info(props) {
   return (
     <div className="info" style={{ display: "flex" }}>
       <div className="search-block">
-        <input className="search" />
+        <input className=" form-control" />
         <i className="fa fa-search" />
       </div>
       <div className="avatar-group" style={{ display: "flex" }}>
         {listMembers?.map((member, index) => {
-          return <Avatar src={member.avatar} key={index}></Avatar>
+          return <Avatar src={member.avatar} key={index}></Avatar>;
         })}
       </div>
       <div style={{ marginLeft: 20 }} className="text">

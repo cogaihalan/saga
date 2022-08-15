@@ -20,6 +20,7 @@ import MainJira from "./components/Jira/Main";
 import CreateProjectWithFormik from "./pages/JiraClone/CreateProject/CreateProject";
 import ProjectManagement from "./pages/JiraClone/ProjectManagement/ProjectManagement";
 import JiraModal from "./HOC/JIra/JiraModal";
+import DragDrop from "./pages/DragDrop/DragDrop";
 function App() {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -35,6 +36,12 @@ function App() {
       <JiraModal></JiraModal>
       <LoadingComponent></LoadingComponent>
       <Switch>
+        <HomeTemplate
+          exact
+          path="/dragdrop"
+          Component={DragDrop}
+        ></HomeTemplate>
+
         {/* <HomeTemplate
           exact
           path="/todolist_thunk"
@@ -65,7 +72,11 @@ function App() {
           path="/login"
           Component={LoginJiraWithFormik}
         ></UserLoginTemplate>
-        <JiraTemplate exact path="/" Component={ProjectManagement}></JiraTemplate>
+        <JiraTemplate
+          exact
+          path="/"
+          Component={ProjectManagement}
+        ></JiraTemplate>
         <JiraTemplate exact path="/jira" Component={MainJira}></JiraTemplate>
         <JiraTemplate
           exact
