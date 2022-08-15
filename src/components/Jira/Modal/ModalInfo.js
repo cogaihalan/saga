@@ -1,20 +1,33 @@
+import { Editor } from "@tinymce/tinymce-react";
 import { Avatar } from "antd";
 import HTMLReactParser from "html-react-parser";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   GET_TASK_STATUS_API,
   GET_TASK_TYPE_API,
   GET_TASK_PRIORITY_API,
   GET_COMMENT_API,
+  UPDATE_TASK_DETAIL_API,
 } from "../../../redux/types/JiraConstants";
 export default function ModalInfo() {
   const dispatch = useDispatch();
   const taskDetail = useSelector(
     (stateList) => stateList.JiraTaskReducer.taskDetail
   );
-  console.log(taskDetail);
-
+  const [state, setState] = useState({
+    visible: true,
+    prevContent: taskDetail?.description,
+    currContent: "",
+  });
+  const handleChange = (e) => {
+    let { value, name } = e.target;
+    dispatch({
+      type: UPDATE_TASK_DETAIL_API,
+      updateTask: { ...taskDetail, [name]: value },
+      projectID: taskDetail.projectId,
+    });
+  };
   const MAX_TIME =
     taskDetail.timeTrackingRemaining + taskDetail.timeTrackingSpent;
   const PERCENT_TIME = (taskDetail.timeTrackingSpent / MAX_TIME) * 100;
@@ -61,10 +74,7 @@ export default function ModalInfo() {
                   <span style={{ paddingRight: 20 }}>Copy link</span>
                 </div>
                 <div className="task-click">
-                  <i
-                    className="fa fa-trash-alt"
-                    style={{ cursor: "pointer" }}
-                  />
+                  <i className="fa fa-trash-alt" />
                 </div>
                 <div className="task-click">
                   <button
@@ -88,12 +98,34 @@ export default function ModalInfo() {
                     </p>
                     <div className="description">
                       <p>Description</p>
-                      <p>{/* {HTMLReactParser(taskDetail.description)} */}</p>
+                      <p>{HTMLReactParser(taskDetail.description)}</p>
+                      <Editor
+                        value={taskDetail.description}
+                        // onEditorChange={handleChange}
+                        name="description"
+                        initialValue={taskDetail.description}
+                        init={{
+                          height: 420,
+                          menubar: false,
+                          plugins: [
+                            "advlist autolink lists link image charmap print preview anchor",
+                            "searchreplace visualblocks code fullscreen",
+                            "insertdatetime media table paste code help wordcount",
+                          ],
+                          toolbar:
+                            "undo redo | formatselect | " +
+                            "bold italic backcolor | alignleft aligncenter " +
+                            "alignright alignjustify | bullist numlist outdent indent | " +
+                            "removeformat | help",
+                          content_style:
+                            "body { font-family:Poppins,Arial,sans-serif; font-size:16px }",
+                        }}
+                      />
                     </div>
 
                     <div className="comment mt-5">
                       <h6>Comment</h6>
-                      <button
+                      {/* <button
                         className="btn btn-primary"
                         onClick={() => {
                           dispatch({
@@ -103,11 +135,11 @@ export default function ModalInfo() {
                         }}
                       >
                         GET COMMENT
-                      </button>
+                      </button> */}
                       {/* {taskDetail?.lstComment.map((comment ,index)=>{
                         return
                       })} */}
-                      {/* <div
+                      <div
                         className="block-comment"
                         style={{ display: "flex" }}
                       >
@@ -118,7 +150,11 @@ export default function ModalInfo() {
                           />
                         </div>
                         <div className="input-comment">
-                          <input type="text" placeholder="Add a comment ..." />
+                          <input
+                            className="form-control"
+                            type="text"
+                            placeholder="Add a comment ..."
+                          />
                           <p>
                             <span style={{ fontWeight: 500, color: "gray" }}>
                               Protip:
@@ -175,13 +211,18 @@ export default function ModalInfo() {
                             </div>
                           </div>
                         </div>
-                      </div> */}
+                      </div>
                     </div>
                   </div>
                   <div className="col-4">
                     <div className="status">
                       <h6>STATUS</h6>
-                      <select className="custom-select">
+                      <select
+                        value={taskDetail.statusId}
+                        onChange={handleChange}
+                        name="statusId"
+                        className="custom-select form-control"
+                      >
                         {listTaskStatus?.map((status, index) => {
                           return (
                             <option key={index} value={status.statusId}>
@@ -239,7 +280,12 @@ export default function ModalInfo() {
                     </div> */}
                     <div className="priority" style={{ marginBottom: 20 }}>
                       <h6>PRIORITY</h6>
-                      <select className="custom-select">
+                      <select
+                        value={taskDetail.projectId}
+                        name="priorityId"
+                        onChange={handleChange}
+                        className="custom-select form-control"
+                      >
                         {listTaskPriority?.map((priority, index) => {
                           return (
                             <option key={index} value={priority.priorityId}>
@@ -252,8 +298,10 @@ export default function ModalInfo() {
                     <div className="estimate">
                       <h6>ORIGINAL ESTIMATE (HOURS)</h6>
                       <input
+                        name="originalEstimate"
+                        onChange={handleChange}
                         type="text"
-                        className="estimate-hours"
+                        className="estimate-hours form-control"
                         value={taskDetail?.originalEstimate}
                       />
                     </div>
@@ -287,6 +335,29 @@ export default function ModalInfo() {
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "12px",
+                      }}
+                    >
+                      <input
+                        type="number"
+                        value={taskDetail?.timeTrackingSpent}
+                        name="timeTrackingSpent"
+                        onChange={handleChange}
+                        className="logged form-control"
+                      />
+
+                      <input
+                        type="number"
+                        value={taskDetail?.timeTrackingRemaining}
+                        name="timeTrackingRemaining"
+                        onChange={handleChange}
+                        className="estimate-time form-control"
+                      />
                     </div>
                     <div style={{ color: "#929398" }}>
                       Create at a month ago

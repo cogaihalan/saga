@@ -6,7 +6,19 @@ import {
 } from "../../types/JiraConstants";
 
 const initialState = {
-  taskDetail: {},
+  taskDetail: {
+    listUserAsign: [],
+    taskId: "1",
+    taskName: "di choi ",
+    description: "mo ta ve task",
+    statusId: "1",
+    originalEstimate: 0,
+    timeTrackingSpent: 0,
+    timeTrackingRemaining: 0,
+    projectId: 0,
+    typeId: 0,
+    priorityId: 0,
+  },
   listTaskType: [],
   listTaskPriority: [],
   listTaskStatus: [],

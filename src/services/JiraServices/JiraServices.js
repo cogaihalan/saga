@@ -103,6 +103,14 @@ class JiraServices {
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
+  updateTaskDetail = (updateTask) => {
+    return Axios({
+      method: "POST",
+      url: `${JIRA_DOMAIN}/Project/updateTask`,
+      data: updateTask,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
   //COMMENT
   getComment = (taskID) => {
     return Axios.get(`${JIRA_DOMAIN}/Comment/getAll?taskId=${taskID}`);

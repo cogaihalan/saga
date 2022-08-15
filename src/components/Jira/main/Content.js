@@ -21,7 +21,7 @@ export default function Content(props) {
     }
   };
   return (
-    <div className="content" style={{ display: "flex" }}>
+    <div>
       <button
         onClick={() => {
           dispatch({
@@ -35,62 +35,64 @@ export default function Content(props) {
       >
         SEE DETAILS
       </button>
-      {listTasks?.map((task, index) => {
-        return (
-          <div
-            key={index}
-            className="card"
-            style={{ width: "17rem", height: "auto" }}
-          >
-            <div className="card-header" style={{ fontSize: "14px" }}>
-              {task.statusName}
-            </div>
-            <ul className="list-group list-group-flush">
-              {task.lstTaskDetail?.map((taskDetail, index) => {
-                return (
-                  <li
-                    onClick={() => {
-                      dispatch({
-                        type: GET_TASK_DETAIL_API,
-                        taskID: taskDetail.taskId,
-                      });
-                    }}
-                    key={index}
-                    className="list-group-item"
-                    data-bs-toggle="modal"
-                    data-bs-target="#infoModal"
-                  >
-                    <p>{taskDetail.taskName}</p>
-                    <div className="block" style={{ display: "flex" }}>
-                      <div className="block-left">
-                        {renderPriority(taskDetail.priorityTask.priorityId)}
-                        <span className="text text-dark">
-                          {taskDetail.priorityTask.priority}
-                        </span>
-                      </div>
-                      <div className="block-right">
-                        <div
-                          className="avatar-group"
-                          style={{ display: "flex" }}
-                        >
-                          {taskDetail.assigness.map((assigner, index) => {
-                            return (
-                              <Avatar
-                                key={index}
-                                src={assigner.avatar}
-                              ></Avatar>
-                            );
-                          })}
+      <div className="content" style={{ display: "flex" }}>
+        {listTasks?.map((task, index) => {
+          return (
+            <div
+              key={index}
+              className="card"
+              style={{ width: "17rem", height: "auto" }}
+            >
+              <div className="card-header" style={{ fontSize: "14px" }}>
+                {task.statusName}
+              </div>
+              <ul className="list-group list-group-flush">
+                {task.lstTaskDetail?.map((taskDetail, index) => {
+                  return (
+                    <li
+                      onClick={() => {
+                        dispatch({
+                          type: GET_TASK_DETAIL_API,
+                          taskID: taskDetail.taskId,
+                        });
+                      }}
+                      key={index}
+                      className="list-group-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#infoModal"
+                    >
+                      <p>{taskDetail.taskName}</p>
+                      <div className="block" style={{ display: "flex" }}>
+                        <div className="block-left">
+                          {renderPriority(taskDetail.priorityTask.priorityId)}
+                          <span className="text text-dark">
+                            {taskDetail.priorityTask.priority}
+                          </span>
+                        </div>
+                        <div className="block-right">
+                          <div
+                            className="avatar-group"
+                            style={{ display: "flex" }}
+                          >
+                            {taskDetail.assigness.map((assigner, index) => {
+                              return (
+                                <Avatar
+                                  key={index}
+                                  src={assigner.avatar}
+                                ></Avatar>
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        );
-      })}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

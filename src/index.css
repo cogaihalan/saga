@@ -315,7 +315,9 @@ p {
 .modal-search {
   margin: 0px !important;
 }
-
+.card-header {
+  font-size: 13px !important;
+}
 .modal-search .modal-content {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
