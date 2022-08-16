@@ -2,9 +2,13 @@ import { Avatar } from "antd";
 import React from "react";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { GET_TASK_DETAIL_API } from "../../../redux/types/JiraConstants";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  GET_TASK_DETAIL_API,
+  UPDATE_TASK_STATUS_API,
+} from "../../../redux/types/JiraConstants";
 export default function Content(props) {
-  const { listTasks } = props;
+  const { projectDetail } = props;
   const dispatch = useDispatch();
   const renderPriority = (priorityId) => {
     switch (priorityId) {
@@ -17,82 +21,128 @@ export default function Content(props) {
       case 4:
         return <ArrowDownOutlined color="mediumseagreen" />;
       default:
-        return 1;
+        return -1;
     }
   };
-  return (
-    <div>
-      <button
-        onClick={() => {
-          dispatch({
-            type: GET_TASK_DETAIL_API,
-            taskID: 5277,
-          });
-        }}
-        data-bs-toggle="modal"
-        data-bs-target="#infoModal"
-        className="btn btn-primary"
-      >
-        SEE DETAILS
-      </button>
-      <div className="content" style={{ display: "flex" }}>
-        {listTasks?.map((task, index) => {
+  const handleDragEnd = (result) => {
+    const { destination, source } = result;
+    const { projectId, taskId } = JSON.parse(result.draggableId);
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    dispatch({
+      type: UPDATE_TASK_STATUS_API,
+      taskStatus: {
+        taskId,
+        statusId: destination.droppableId,
+      },
+      projectId,
+    });
+  };
+  const renderContent = () => {
+    return (
+      <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+        {projectDetail.lstTask.map((taskList, index) => {
           return (
-            <div
-              key={index}
-              className="card"
-              style={{ width: "17rem", height: "auto" }}
-            >
-              <div className="card-header" style={{ fontSize: "14px" }}>
-                {task.statusName}
-              </div>
-              <ul className="list-group list-group-flush">
-                {task.lstTaskDetail?.map((taskDetail, index) => {
-                  return (
-                    <li
-                      onClick={() => {
-                        dispatch({
-                          type: GET_TASK_DETAIL_API,
-                          taskID: taskDetail.taskId,
-                        });
-                      }}
-                      key={index}
-                      className="list-group-item"
-                      data-bs-toggle="modal"
-                      data-bs-target="#infoModal"
+            <Droppable droppableId={taskList.statusId} key={index}>
+              {(provided) => {
+                return (
+                  <div
+                    className="card"
+                    style={{ width: "20rem", height: "auto" }}
+                  >
+                    <div className="card-header" style={{ fontSize: "14px" }}>
+                      {taskList.statusName}
+                    </div>
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className="list-group list-group-flush"
+                      style={{ height: "100%" }}
                     >
-                      <p>{taskDetail.taskName}</p>
-                      <div className="block" style={{ display: "flex" }}>
-                        <div className="block-left">
-                          {renderPriority(taskDetail.priorityTask.priorityId)}
-                          <span className="text text-dark">
-                            {taskDetail.priorityTask.priority}
-                          </span>
-                        </div>
-                        <div className="block-right">
-                          <div
-                            className="avatar-group"
-                            style={{ display: "flex" }}
-                          >
-                            {taskDetail.assigness.map((assigner, index) => {
-                              return (
-                                <Avatar
-                                  key={index}
-                                  src={assigner.avatar}
-                                ></Avatar>
-                              );
+                      {taskList.lstTaskDeTail.map((taskDetail, index) => {
+                        return (
+                          <Draggable
+                            key={taskDetail.taskId.toString()}
+                            draggableId={JSON.stringify({
+                              projectId: taskDetail.projectId,
+                              taskId: taskDetail.taskId.toString(),
                             })}
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+                            index={index}
+                          >
+                            {(provided) => {
+                              return (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  key={index}
+                                  onClick={() => {
+                                    dispatch({
+                                      type: GET_TASK_DETAIL_API,
+                                      taskID: taskDetail.taskId,
+                                    });
+                                  }}
+                                  className="list-group-item"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#infoModal"
+                                >
+                                  <p>{taskDetail.taskName}</p>
+                                  <div
+                                    className="block"
+                                    style={{ display: "flex" }}
+                                  >
+                                    <div className="block-left">
+                                      {renderPriority(
+                                        taskDetail.priorityTask.priorityId
+                                      )}
+                                      <span className="text text-dark">
+                                        {taskDetail.priorityTask.priority}
+                                      </span>
+                                    </div>
+                                    <div className="block-right">
+                                      <div
+                                        className="avatar-group"
+                                        style={{ display: "flex" }}
+                                      >
+                                        {taskDetail.assigness.map(
+                                          (assigner, index) => {
+                                            return (
+                                              <Avatar
+                                                key={index}
+                                                src={assigner.avatar}
+                                              ></Avatar>
+                                            );
+                                          }
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }}
+                          </Draggable>
+                        );
+                      })}
+                      {provided.placeholder}
+                    </div>
+                  </div>
+                );
+              }}
+            </Droppable>
           );
         })}
-      </div>
+      </DragDropContext>
+    );
+  };
+
+  return (
+    <div className="content" style={{ display: "flex" }}>
+      {renderContent()}
     </div>
   );
 }

@@ -42,7 +42,7 @@ function App() {
           path="/dragdrop"
           Component={DragDrop}
         ></HomeTemplate>
-        <HomeTemplate exact path="/DnD" Component={DnDLibrary}></HomeTemplate>
+        {/* <HomeTemplate exact path="/DnD" Component={DnDLibrary}></HomeTemplate> */}
         {/* <HomeTemplate
           exact
           path="/todolist_thunk"

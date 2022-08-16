@@ -73,7 +73,6 @@ function FormCreateTask(props) {
                     idProject: Number(e.target.value),
                   });
                   setFieldValue("listUserAsign", []);
-                  console.log(values.listUserAsign);
                 }}
                 name="projectId"
               >

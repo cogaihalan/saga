@@ -22,6 +22,7 @@ export function* rootSaga() {
     JiraMangeTaskSaga.theoDoiGetTaskType(),
     JiraMangeTaskSaga.theoDoiGetTaskPriority(),
     JiraMangeTaskSaga.theoDoiGetTaskStatus(),
+    JiraMangeTaskSaga.theoDoiUpdateTaskStatus(),
     JiraMangeTaskSaga.theoDoiCreateTask(),
     JiraMangeTaskSaga.theoDoiGetTaskDetail(),
     JiraMangeTaskSaga.theoDoiHandleChangeAndPostTaskDetail(),

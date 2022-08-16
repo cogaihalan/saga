@@ -23,8 +23,6 @@ function* getTaskAPI() {
         type: GET_TASK_LIST,
         data: data,
       });
-    } else {
-      console.log({ data: data, status: status });
     }
     yield put({
       type: HIDE_LOADING,

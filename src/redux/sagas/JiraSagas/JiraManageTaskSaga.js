@@ -19,6 +19,7 @@ import {
   UPDATE_TASK_DETAIL,
   // UPDATE_TASK_DETAIL,
   UPDATE_TASK_DETAIL_API,
+  UPDATE_TASK_STATUS_API,
 } from "../../types/JiraConstants";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../../types/LoadingConstants";
 import { Notification } from "../../../utils/notification/Notification";
@@ -63,8 +64,7 @@ function* createTask(action) {
   });
   yield delay(300);
   try {
-    const { data, status } = yield call(JiraService.createTask, action.task);
-    console.log(data.content, status);
+    const { status } = yield call(JiraService.createTask, action.task);
     if (status === STATUS_CODE.SUCCESS) {
       yield put({
         type: CLOSE_DRAWER,
@@ -99,6 +99,27 @@ export function* theoDoiGetTaskStatus() {
   yield takeLatest(GET_TASK_STATUS_API, getTaskStatus);
 }
 
+function* updateTaskStatus(action) {
+  const { taskStatus, projectId } = action;
+  try {
+    const { status } = yield call(JiraService.updateTaskStatus, taskStatus);
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put({
+        type: GET_PROJECT_DETAIL_API,
+        projectID: projectId,
+      });
+      yield put({
+        type: GET_TASK_DETAIL_API,
+        taskID: taskStatus.taskId,
+      });
+    }
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+export function* theoDoiUpdateTaskStatus() {
+  yield takeLatest(UPDATE_TASK_STATUS_API, updateTaskStatus);
+}
 function* getTaskDetail(action) {
   try {
     const { data, status } = yield call(

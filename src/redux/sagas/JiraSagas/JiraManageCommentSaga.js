@@ -5,7 +5,6 @@ import { GET_COMMENT_API } from "../../types/JiraConstants";
 function* getComment(action) {
   try {
     const { data, status } = yield call(JiraService.getComment, action.taskID);
-    console.log({ data, status });
   } catch (err) {
     throw new Error(err);
   }

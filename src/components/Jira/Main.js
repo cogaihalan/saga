@@ -15,13 +15,13 @@ export default function MainJira(props) {
   const { projectDetail } = useSelector(
     (stateList) => stateList.JiraProjectReducer
   );
-  const { lstTask, members } = projectDetail;
+  const { members } = projectDetail;
   return (
     <div className="main">
       <Header></Header>
       <h3>Jira Board</h3>
       <Info listMembers={members}></Info>
-      <Content listTasks={lstTask}></Content>
+      <Content projectDetail={projectDetail}></Content>
     </div>
   );
 }

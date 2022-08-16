@@ -328,9 +328,11 @@ export default function ModalInfo() {
                             </div>
                           );
                         })}
+
                         <Select
                           style={{ width: "100%" }}
                           options={listAssignees}
+                          placement="bottomLeft"
                           placeholder="Select a person"
                           optionFilterProp="label"
                           onSelect={(value) => {

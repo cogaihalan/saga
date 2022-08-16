@@ -96,6 +96,14 @@ class JiraServices {
   getTaskStatus = () => {
     return Axios.get(`${JIRA_DOMAIN}/Status/getAll`);
   };
+  updateTaskStatus = (taskStatus) => {
+    return Axios({
+      method: "PUT",
+      data: taskStatus,
+      url: `${JIRA_DOMAIN}/Project/updateStatus`,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
   getTaskDetail = (taskID) => {
     return Axios({
       method: "GET",
