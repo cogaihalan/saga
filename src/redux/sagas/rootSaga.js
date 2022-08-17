@@ -9,8 +9,11 @@ import * as JiraManageCommentSaga from "./JiraSagas/JiraManageCommentSaga";
 export function* rootSaga() {
   yield all([
     JiraUserSaga.theoDoiSignIn(),
+    JiraUserSaga.theoDoiSignUp(),
     JiraUserSaga.theoDoiGetUsers(),
     JiraUserSaga.theoDoiGetUsersByProjectId(),
+    JiraUserSaga.theoDoiEditUser(),
+    JiraUserSaga.theoDoiDeleteUser(),
     JiraUserSaga.theoDoiAssignUserToProject(),
     JiraUserSaga.theoDoiRemoveUserFromProject(),
     JiraProjectCategorySaga.theoDoiGetAllProjectCategory(),
@@ -27,5 +30,8 @@ export function* rootSaga() {
     JiraMangeTaskSaga.theoDoiGetTaskDetail(),
     JiraMangeTaskSaga.theoDoiHandleChangeAndPostTaskDetail(),
     JiraManageCommentSaga.theoDoiGetComment(),
+    JiraManageCommentSaga.theoDoiDeleteComment(),
+    JiraManageCommentSaga.theoDoiUpdateComment(),
+    JiraManageCommentSaga.theoDoiInsertComment(),
   ]);
 }

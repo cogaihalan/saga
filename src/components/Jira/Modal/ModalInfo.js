@@ -13,6 +13,10 @@ import {
   UPDATE_DESCRIPTION_TASK,
   CHANGE_ASSIGNESS,
   REMOVE_ASSIGNESS,
+  DELETE_COMMENT_API,
+  INSERT_COMMENT_API,
+  EDIT_COMMENT_API,
+  UPDATE_COMMENT_API,
 } from "../../../redux/types/JiraConstants";
 export default function ModalInfo() {
   const dispatch = useDispatch();
@@ -50,11 +54,7 @@ export default function ModalInfo() {
   const { listTaskPriority, listTaskStatus } = useSelector(
     (stateList) => stateList.JiraTaskReducer
   );
-  const [state, setState] = useState({
-    visible: true,
-    prevContent: taskDetail?.description,
-    currContent: "",
-  });
+  // State Comment
 
   useEffect(() => {
     dispatch({
@@ -67,6 +67,239 @@ export default function ModalInfo() {
       type: GET_TASK_STATUS_API,
     });
   }, []);
+  // State Task Detail
+  const [taskDescription, setTaskDescription] = useState({
+    visible: false,
+    prevContent: taskDetail.description,
+    currContent: taskDetail.description,
+  });
+  const [visibleComment, setVisibleComment] = useState(true);
+  const [userComment, setUserComment] = useState("");
+  const renderDescription = () => {
+    const jsxDescription = HTMLReactParser(taskDetail.description);
+    return (
+      <div>
+        {taskDescription.visible ? (
+          <div>
+            <Editor
+              onEditorChange={(content) => {
+                setTaskDescription({
+                  ...taskDescription,
+                  currContent: content,
+                });
+              }}
+              name="description"
+              initialValue={taskDetail.description}
+              init={{
+                height: 420,
+                menubar: false,
+                plugins: [
+                  "advlist autolink lists link image charmap print preview anchor",
+                  "searchreplace visualblocks code fullscreen",
+                  "insertdatetime media table paste code help wordcount",
+                ],
+                toolbar:
+                  "undo redo | formatselect | " +
+                  "bold italic backcolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat | help",
+                content_style:
+                  "body { font-family:Poppins,Arial,sans-serif; font-size:16px }",
+              }}
+            />
+            <div className="button-group mt-2">
+              <button
+                className="btn btn-primary me-2"
+                onClick={() => {
+                  dispatch({
+                    type: UPDATE_TASK_DETAIL_API,
+                    actionType: UPDATE_DESCRIPTION_TASK,
+                    updateTask: {
+                      ...taskDetail,
+                      description: taskDescription.currContent,
+                    },
+                  });
+                  setTaskDescription({
+                    ...taskDescription,
+                    visible: false,
+                  });
+                }}
+              >
+                Save
+              </button>
+              <button
+                onClick={() => {
+                  dispatch({
+                    type: UPDATE_TASK_DETAIL_API,
+                    actionType: UPDATE_DESCRIPTION_TASK,
+                    updateTask: {
+                      ...taskDetail,
+                      description: taskDescription.prevContent,
+                    },
+                  });
+                  setTaskDescription({
+                    ...taskDescription,
+                    visible: false,
+                  });
+                }}
+                className="btn btn-secondary"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setTaskDescription({
+                ...taskDescription,
+                visible: true,
+                prevContent: taskDetail.description,
+              });
+            }}
+          >
+            {jsxDescription}
+          </div>
+        )}
+      </div>
+    );
+  };
+  const renderComment = () => {
+    return (
+      <div>
+        <div className="block-comment mb-3" style={{ display: "flex" }}>
+          <div className="input-comment">
+            <Editor
+              onEditorChange={(content) => {
+                setUserComment(content);
+              }}
+              initialValue=""
+              init={{
+                height: 170,
+                menubar: false,
+                plugins: [
+                  "advlist autolink lists link image charmap print preview anchor",
+                  "searchreplace visualblocks code fullscreen",
+                  "insertdatetime media table paste code help wordcount",
+                ],
+                toolbar:
+                  "undo redo | formatselect | " +
+                  "bold italic backcolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat | help",
+                content_style:
+                  "body { font-family:Poppins,Arial,sans-serif; font-size:14px }",
+              }}
+            />
+            <div className="button-group mt-2 ">
+              <button
+                onClick={() => {
+                  dispatch({
+                    type: INSERT_COMMENT_API,
+                    newComment: {
+                      taskId: taskDetail.taskId,
+                      contentComment: userComment,
+                    },
+                  });
+                }}
+                className="btn btn-primary me-2"
+              >
+                Add comment
+              </button>
+            </div>
+          </div>
+        </div>
+        {taskDetail.lstComment.map((comment, index) => {
+          const jsxComment = HTMLReactParser(comment.commentContent);
+          return (
+            <div key={index} className="mb-2">
+              <div className="lastest-comment">
+                <div className="comment-item">
+                  <div className="display-comment" style={{ display: "flex" }}>
+                    <div className="me-3 d-flex justify-content-center align-items-center">
+                      <Avatar src={comment.avatar}></Avatar>
+                    </div>
+                    <div>
+                      <p style={{ marginBottom: 5 }}>{comment.name}</p>
+                      <div>
+                        {visibleComment ? (
+                          <div
+                            onClick={() => {
+                              setVisibleComment(!visibleComment);
+                            }}
+                            style={{ marginBottom: 5 }}
+                          >
+                            {jsxComment}
+                          </div>
+                        ) : (
+                          <Editor
+                            onEditorChange={(content) => {
+                              setUserComment(content);
+                            }}
+                            initialValue={comment.commentContent}
+                            init={{
+                              height: 150,
+                              menubar: false,
+                              // plugins: [
+                              //   "advlist autolink lists link image charmap print preview anchor",
+                              //   "searchreplace visualblocks code fullscreen",
+                              //   "insertdatetime media table paste code help wordcount",
+                              // ],
+                              // toolbar:
+                              //   "undo redo | formatselect | " +
+                              //   "bold italic backcolor | alignleft aligncenter " +
+                              //   "alignright alignjustify | bullist numlist outdent indent | " +
+                              //   "removeformat | help",
+                              content_style:
+                                "body { font-family:Poppins,Arial,sans-serif; font-size:12px }",
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="task-btns ">
+                        <span
+                          style={{ cursor: "pointer" }}
+                          className="text text-primary me-2"
+                          onClick={() => {
+                            setVisibleComment(!visibleComment);
+                            dispatch({
+                              type: UPDATE_COMMENT_API,
+                              updateComment: {
+                                id: comment.id,
+                                contentComment: userComment,
+                              },
+                              taskID: taskDetail.taskId,
+                            });
+                          }}
+                        >
+                          Edit
+                        </span>
+
+                        <span
+                          style={{ cursor: "pointer" }}
+                          className="text text-danger"
+                          onClick={() => {
+                            dispatch({
+                              type: DELETE_COMMENT_API,
+                              commentID: comment.id,
+                              taskID: taskDetail.taskId,
+                            });
+                          }}
+                        >
+                          Delete
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
   return (
     <div>
       <div
@@ -121,168 +354,13 @@ export default function ModalInfo() {
                       </span>
                     </p>
                     <div className="description title">
-                      <p>Description</p>
-                      {state.visible ? (
-                        <div
-                          onClick={() => {
-                            setState({ ...state, visible: false });
-                          }}
-                        >
-                          {HTMLReactParser(state.prevContent)}
-                        </div>
-                      ) : (
-                        <div>
-                          <Editor
-                            onEditorChange={(content) => {
-                              setState({ ...state, currContent: content });
-                            }}
-                            name="description"
-                            initialValue={state.prevContent}
-                            init={{
-                              height: 420,
-                              menubar: false,
-                              plugins: [
-                                "advlist autolink lists link image charmap print preview anchor",
-                                "searchreplace visualblocks code fullscreen",
-                                "insertdatetime media table paste code help wordcount",
-                              ],
-                              toolbar:
-                                "undo redo | formatselect | " +
-                                "bold italic backcolor | alignleft aligncenter " +
-                                "alignright alignjustify | bullist numlist outdent indent | " +
-                                "removeformat | help",
-                              content_style:
-                                "body { font-family:Poppins,Arial,sans-serif; font-size:16px }",
-                            }}
-                          />
-                          <div className="button-group mt-2">
-                            <button
-                              className="btn btn-primary me-2"
-                              onClick={() => {
-                                dispatch({
-                                  type: UPDATE_TASK_DETAIL_API,
-                                  actionType: UPDATE_DESCRIPTION_TASK,
-                                  updateTask: {
-                                    ...taskDetail,
-                                    description: state.currContent,
-                                  },
-                                });
-                                setState({
-                                  ...state,
-                                  visible: true,
-                                  prevContent: state.currContent,
-                                  currContent: "",
-                                });
-                              }}
-                            >
-                              Save
-                            </button>
-                            <button
-                              onClick={() => {
-                                setState({
-                                  ...state,
-                                  visible: true,
-                                  currContent: "",
-                                });
-                              }}
-                              className="btn btn-secondary"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      )}
+                      <p className="fw-700 fs-4">Description</p>
+                      {renderDescription()}
                     </div>
 
-                    <div className="comment title mt-5">
+                    <div className="comment title mt-3">
                       <h6>Comment</h6>
-                      {/* <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          dispatch({
-                            type: GET_COMMENT_API,
-                            taskID: taskDetail.taskId,
-                          });
-                        }}
-                      >
-                        GET COMMENT
-                      </button> */}
-                      {/* {taskDetail?.lstComment.map((comment ,index)=>{
-                        return
-                      })} */}
-                      <div
-                        className="block-comment"
-                        style={{ display: "flex" }}
-                      >
-                        <div className="avatar">
-                          <img
-                            src="/Jira/download (1).jfif"
-                            alt="avatarImage"
-                          />
-                        </div>
-                        <div className="input-comment">
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Add a comment ..."
-                          />
-                          <p>
-                            <span style={{ fontWeight: 500, color: "gray" }}>
-                              Protip:
-                            </span>
-                            <span>
-                              press
-                              <span
-                                style={{
-                                  margin: "0 4px",
-                                  fontWeight: "bold",
-                                  background: "#ecedf0",
-                                  color: "#b4bac6",
-                                  fontSize: "18px",
-                                }}
-                              >
-                                M
-                              </span>
-                              to comment
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="lastest-comment">
-                        <div className="comment-item">
-                          <div
-                            className="display-comment"
-                            style={{ display: "flex" }}
-                          >
-                            <div className="avatar">
-                              <img
-                                src="/Jira/download (1).jfif"
-                                alt="avatarImage"
-                              />
-                            </div>
-                            <div>
-                              <p style={{ marginBottom: 5 }}>
-                                Lord Gaben <span>a month ago</span>
-                              </p>
-                              <p style={{ marginBottom: 5 }}>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Repellendus tempora ex
-                                voluptatum saepe ab officiis alias totam ad
-                                accusamus molestiae?
-                              </p>
-                              <div className="task-btns mt-4">
-                                <button className="btn btn-primary me-2">
-                                  Edit
-                                </button>
-
-                                <button className="btn btn-danger">
-                                  Delete
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      {renderComment()}
                     </div>
                   </div>
                   <div className="col-4">
@@ -352,10 +430,7 @@ export default function ModalInfo() {
                         ></Select>
                       </div>
                     </div>
-                    <div
-                      className="priority title"
-                      style={{ marginBottom: 20 }}
-                    >
+                    <div className="priority title">
                       <h6>PRIORITY</h6>
                       <select
                         value={taskDetail.priorityId}

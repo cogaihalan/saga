@@ -124,7 +124,6 @@ const EditProjectWithFormik = withFormik({
     projectName: Yup.string().required("Name is required !"),
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
-    console.log(values);
     props.dispatch({
       type: UPDATE_PROJECT_API,
       projectUpdate: values,

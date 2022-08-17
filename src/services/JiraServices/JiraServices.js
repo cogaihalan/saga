@@ -8,6 +8,13 @@ class JiraServices {
       passWord: userLogin.password,
     });
   };
+  signUp = (newUser) => {
+    return Axios({
+      method: "POST",
+      url: `${JIRA_DOMAIN}/Users/signup`,
+      data: newUser,
+    });
+  };
   getUser = (userKeyword) => {
     return Axios({
       method: "GET",
@@ -34,6 +41,20 @@ class JiraServices {
       url: `${JIRA_DOMAIN}/Project/removeUserFromProject`,
       method: "POST",
       data: userProject,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
+    });
+  };
+  editUser = (updatedUser) => {
+    return Axios({
+      method: "PUT",
+      url: `${JIRA_DOMAIN}/Users/editUser`,
+      data: updatedUser,
+    });
+  };
+  deleteUser = (idUser) => {
+    return Axios({
+      method: "DELETE",
+      url: `${JIRA_DOMAIN}/Users/deleteUser?id=${idUser}`,
       headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
@@ -139,12 +160,14 @@ class JiraServices {
     return Axios({
       method: "PUT",
       url: `${JIRA_DOMAIN}/Comment/updateComment?id=${id}&contentComment=${contentComment}`,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
   deleteComment = (idComment) => {
     return Axios({
       method: "DELETE",
       url: `${JIRA_DOMAIN}/Comment/deleteComment?idComment=${idComment}`,
+      headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN) },
     });
   };
 }

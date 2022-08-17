@@ -116,20 +116,25 @@ export default function ProjectManagement(props) {
                                 </td>
                                 <td>{member.name}</td>
                                 <td>
-                                  <Button
-                                    onClick={() => {
+                                  <Popconfirm
+                                    title="Are you sure to delete this project?"
+                                    onConfirm={() => {
                                       dispatch({
-                                        type: "REMOVE_USER_FROM_PROJECT_API",
+                                        type: REMOVE_USER_FROM_PROJECT_API,
                                         userProject: {
                                           projectId: record.id,
                                           userId: member.userId,
                                         },
                                       });
                                     }}
-                                    className="btn btn-danger d-flex align-items-center justify-content-center"
+                                    onCancel={() => {}}
+                                    okText="Yes"
+                                    cancelText="No"
                                   >
-                                    <DeleteOutlined />
-                                  </Button>
+                                    <Button className="btn btn-danger d-flex align-items-center justify-content-center">
+                                      <DeleteOutlined />
+                                    </Button>
+                                  </Popconfirm>
                                 </td>
                               </tr>
                             );
@@ -148,7 +153,7 @@ export default function ProjectManagement(props) {
               );
             })}
 
-            {members?.length > 3 ? <Avatar>...</Avatar> : ""}
+            {members?.length >= 3 ? <Avatar>...</Avatar> : ""}
             <Popover
               placement="rightTop"
               title="Add User "
@@ -201,9 +206,7 @@ export default function ProjectManagement(props) {
       dataIndex: "description",
       key: "description",
       render: (text, index) => {
-        return <div key={index}>
-        {HTMLReactParser(text)}
-        </div>;
+        return <div key={index}>{HTMLReactParser(text)}</div>;
       },
     },
     {
@@ -266,7 +269,12 @@ export default function ProjectManagement(props) {
           marginBottom: 16,
         }}
       ></Space>
-      <Table size="small" columns={columns} rowKey={"id"} dataSource={listProjects} />
+      <Table
+        size="small"
+        columns={columns}
+        rowKey={"id"}
+        dataSource={listProjects}
+      />
     </div>
   );
 }

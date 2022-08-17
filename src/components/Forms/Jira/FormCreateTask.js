@@ -90,7 +90,6 @@ function FormCreateTask(props) {
             <div className="form-group">
               <p className="mt-3 form-text">Task Name</p>
               <input
-                //   value={values.timeTrackingSpent}
                 onChange={handleChange}
                 type="text"
                 name="taskName"
@@ -141,6 +140,7 @@ function FormCreateTask(props) {
             <div className="form-group">
               <p className="mt-3 form-text">Assignees</p>
               <Select
+
                 mode="multiple"
                 optionFilterProp="label"
                 options={listUsers}

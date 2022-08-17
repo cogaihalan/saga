@@ -6,13 +6,13 @@ import {
   TwitterOutlined,
 } from "@ant-design/icons";
 import { withFormik } from "formik";
-import { Input, Button, Checkbox, Anchor } from "antd";
+import { Input, Button, Checkbox } from "antd";
 import * as Yup from "yup";
 import "./LoginJira.css";
 import { connect } from "react-redux";
 import { SIGN_IN_ACTION } from "../../../redux/actions/JiraActions";
+import { NavLink } from "react-router-dom";
 function LoginJira(props) {
-  const { Link } = Anchor;
   const { values, errors, handleChange, handleSubmit, touched } = props;
   return (
     <form onSubmit={handleSubmit}>
@@ -50,12 +50,12 @@ function LoginJira(props) {
           </Button>
           <div className="login-more">
             <Checkbox>Remember me</Checkbox>
-            <Anchor>
-              <Link
-                title="Can't log in ?"
-                href="https://id.atlassian.com/login/resetpassword?application=start&continue=https%3A%2F%2Fstart.atlassian.com%2F&prompt=login"
-              ></Link>
-            </Anchor>
+            <NavLink
+              style={{ color: "black" }}
+              to="/signup"
+            >
+              Need a new account ?
+            </NavLink>
           </div>
           <div className="login-socials">
             <Button shape="circle" className="login-social" type="primary">

@@ -1,16 +1,7 @@
 import "./App.css";
-import TodoList from "./components/TodoList/TodoList";
 import { Switch, useHistory } from "react-router-dom";
-import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
-import Detail from "./pages/Detail/Detail";
-import Profile from "./pages/Profile/Profile";
-import TodoListRedux from "./pages/TodoList/TodoListRedux";
-import TodoListSaga from "./pages/TodoListSaga/TodoListSaga";
 import LoadingComponent from "./components/Global/LoadingComponent/LoadingComponent";
-import DemoModal from "./pages/HOC-Modal/DemoModal";
 import Modal from "./HOC/Modal/Modal";
-import { HomeTemplate } from "./templates/HomeTemplate/HomeTemplate";
 import { UserLoginTemplate } from "./templates/HomeTemplate/UserLoginTemplate";
 import LoginJiraWithFormik from "./pages/JiraClone/LoginJira/LoginJira";
 import { useEffect } from "react";
@@ -20,8 +11,8 @@ import MainJira from "./components/Jira/Main";
 import CreateProjectWithFormik from "./pages/JiraClone/CreateProject/CreateProject";
 import ProjectManagement from "./pages/JiraClone/ProjectManagement/ProjectManagement";
 import JiraModal from "./HOC/JIra/JiraModal";
-import DragDrop from "./pages/DragDrop/DragDrop";
-import DnDLibrary from "./pages/DragDrop/DnDLibrary";
+import SignUpJiraWithFormik from "./pages/JiraClone/SignUpJira/SignUpJira";
+import UserManagement from "./pages/JiraClone/UserManagement/UserManagement";
 function App() {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -37,11 +28,6 @@ function App() {
       <JiraModal></JiraModal>
       <LoadingComponent></LoadingComponent>
       <Switch>
-        <HomeTemplate
-          exact
-          path="/dragdrop"
-          Component={DragDrop}
-        ></HomeTemplate>
         {/* <HomeTemplate exact path="/DnD" Component={DnDLibrary}></HomeTemplate> */}
         {/* <HomeTemplate
           exact
@@ -73,6 +59,11 @@ function App() {
           path="/login"
           Component={LoginJiraWithFormik}
         ></UserLoginTemplate>
+        <UserLoginTemplate
+          exact
+          path="/signup"
+          Component={SignUpJiraWithFormik}
+        ></UserLoginTemplate>
         <JiraTemplate
           exact
           path="/"
@@ -93,6 +84,11 @@ function App() {
           exact
           path="/jira/projects/:id"
           Component={MainJira}
+        ></JiraTemplate>
+        <JiraTemplate
+          exact
+          path="/jira/users"
+          Component={UserManagement}
         ></JiraTemplate>
       </Switch>
     </>

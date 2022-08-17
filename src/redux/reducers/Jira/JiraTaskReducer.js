@@ -23,7 +23,7 @@ const initialState = {
     taskId: 5277,
     taskName: "di choi",
     alias: "di-choi",
-    description: "<p>nhanh</p>",
+    description: "aaasdadas",
     statusId: "1",
     originalEstimate: 0,
     timeTrackingSpent: 9,
