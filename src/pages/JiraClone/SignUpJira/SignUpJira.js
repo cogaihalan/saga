@@ -33,13 +33,13 @@ function SignUpJira(props) {
             <Input
               type="password"
               onChange={handleChange}
-              name="password"
+              name="passWord"
               size="large"
               placeholder="Password ..."
               prefix={<LockOutlined />}
             ></Input>
           </div>
-          <div className="text text-danger">{errors.password}</div>
+          <div className="text text-danger">{errors.passWord}</div>
           <div className="mt-2 login-input">
             <Input
               type="text"

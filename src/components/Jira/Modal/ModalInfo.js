@@ -1,5 +1,6 @@
 import { Editor } from "@tinymce/tinymce-react";
-import { Avatar, Select } from "antd";
+import { Avatar, Select, Popconfirm } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import HTMLReactParser from "html-react-parser";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,6 +18,7 @@ import {
   INSERT_COMMENT_API,
   EDIT_COMMENT_API,
   UPDATE_COMMENT_API,
+  DELETE_TASK_API,
 } from "../../../redux/types/JiraConstants";
 export default function ModalInfo() {
   const dispatch = useDispatch();
@@ -75,6 +77,7 @@ export default function ModalInfo() {
   });
   const [visibleComment, setVisibleComment] = useState(true);
   const [userComment, setUserComment] = useState("");
+  const [newComment, setNewCommnet] = useState("");
   const renderDescription = () => {
     const jsxDescription = HTMLReactParser(taskDetail.description);
     return (
@@ -172,9 +175,10 @@ export default function ModalInfo() {
           <div className="input-comment">
             <Editor
               onEditorChange={(content) => {
+                setNewCommnet(content);
                 setUserComment(content);
               }}
-              initialValue=""
+              value={newComment}
               init={{
                 height: 170,
                 menubar: false,
@@ -202,6 +206,7 @@ export default function ModalInfo() {
                       contentComment: userComment,
                     },
                   });
+                  setNewCommnet("");
                 }}
                 className="btn btn-primary me-2"
               >
@@ -216,79 +221,103 @@ export default function ModalInfo() {
             <div key={index} className="mb-2">
               <div className="lastest-comment">
                 <div className="comment-item">
-                  <div className="display-comment" style={{ display: "flex" }}>
-                    <div className="me-3 d-flex justify-content-center align-items-center">
+                  <div className="display-comment">
+                    <div className="me-2">
                       <Avatar src={comment.avatar}></Avatar>
                     </div>
                     <div>
-                      <p style={{ marginBottom: 5 }}>{comment.name}</p>
+                      <p
+                        style={{
+                          paddingBottom: "5px",
+                          fontSize: "12px",
+                          fontWeight: "700",
+                          color: "rgb(66, 82, 110)",
+                        }}
+                      >
+                        {comment.name}
+                      </p>
                       <div>
                         {visibleComment ? (
-                          <div
-                            onClick={() => {
-                              setVisibleComment(!visibleComment);
-                            }}
-                            style={{ marginBottom: 5 }}
-                          >
-                            {jsxComment}
+                          <div>
+                            <div
+                              style={{
+                                marginBottom: 5,
+                                fontSize: "14px",
+                                color: "rgb(23, 43, 77)",
+                                fontWeight: "600",
+                              }}
+                            >
+                              {jsxComment}
+                            </div>
+                            <div className="task-btns ">
+                              <button
+                                style={{ cursor: "pointer" }}
+                                className="btn btn-primary me-2"
+                                onClick={() => {
+                                  setVisibleComment(!visibleComment);
+                                }}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                style={{ cursor: "pointer" }}
+                                className="btn btn-danger"
+                                onClick={() => {
+                                  dispatch({
+                                    type: DELETE_COMMENT_API,
+                                    commentID: comment.id,
+                                    taskID: taskDetail.taskId,
+                                  });
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
                           </div>
                         ) : (
-                          <Editor
-                            onEditorChange={(content) => {
-                              setUserComment(content);
-                            }}
-                            initialValue={comment.commentContent}
-                            init={{
-                              height: 150,
-                              menubar: false,
-                              // plugins: [
-                              //   "advlist autolink lists link image charmap print preview anchor",
-                              //   "searchreplace visualblocks code fullscreen",
-                              //   "insertdatetime media table paste code help wordcount",
-                              // ],
-                              // toolbar:
-                              //   "undo redo | formatselect | " +
-                              //   "bold italic backcolor | alignleft aligncenter " +
-                              //   "alignright alignjustify | bullist numlist outdent indent | " +
-                              //   "removeformat | help",
-                              content_style:
-                                "body { font-family:Poppins,Arial,sans-serif; font-size:12px }",
-                            }}
-                          />
+                          <div>
+                            <Editor
+                              onEditorChange={(content) => {
+                                setUserComment(content);
+                              }}
+                              initialValue={comment.commentContent}
+                              init={{
+                                height: 150,
+                                menubar: false,
+                                content_style:
+                                  "body { font-family:Poppins,Arial,sans-serif; font-size:12px }",
+                              }}
+                            />
+                            <div className="task-btns ">
+                              <button
+                                style={{ cursor: "pointer" }}
+                                className="btn btn-primary me-2"
+                                onClick={() => {
+                                  setVisibleComment(!visibleComment);
+                                  dispatch({
+                                    type: UPDATE_COMMENT_API,
+                                    updateComment: {
+                                      id: comment.id,
+                                      contentComment: userComment,
+                                    },
+                                    taskID: taskDetail.taskId,
+                                  });
+                                }}
+                              >
+                                Save
+                              </button>
+                              <button
+                                style={{ cursor: "pointer" }}
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                  setVisibleComment(!visibleComment);
+                                }}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
                         )}
-                      </div>
-                      <div className="task-btns ">
-                        <span
-                          style={{ cursor: "pointer" }}
-                          className="text text-primary me-2"
-                          onClick={() => {
-                            setVisibleComment(!visibleComment);
-                            dispatch({
-                              type: UPDATE_COMMENT_API,
-                              updateComment: {
-                                id: comment.id,
-                                contentComment: userComment,
-                              },
-                              taskID: taskDetail.taskId,
-                            });
-                          }}
-                        >
-                          Edit
-                        </span>
-
-                        <span
-                          style={{ cursor: "pointer" }}
-                          className="text text-danger"
-                          onClick={() => {
-                            dispatch({
-                              type: DELETE_COMMENT_API,
-                              commentID: comment.id,
-                              taskID: taskDetail.taskId,
-                            });
-                          }}
-                        >
-                          Delete
-                        </span>
                       </div>
                     </div>
                   </div>
@@ -303,7 +332,7 @@ export default function ModalInfo() {
   return (
     <div>
       <div
-        className="modal fade"
+        className="modal "
         id="infoModal"
         tabIndex={-1}
         role="dialog"
@@ -316,7 +345,10 @@ export default function ModalInfo() {
               <div className="task-title">
                 <i className="fa fa-bookmark" />
                 <span>
-                  TASK {taskDetail.taskId}: {taskDetail.taskName}
+                  TASK {taskDetail.taskId}:
+                  <span className="ms-1 text text-danger">
+                    {taskDetail.taskTypeDetail?.taskType}
+                  </span>
                 </span>
               </div>
               <div style={{ display: "flex" }} className="task-clicks">
@@ -328,9 +360,24 @@ export default function ModalInfo() {
                   <i className="fa fa-link" />
                   <span style={{ paddingRight: 20 }}>Copy link</span>
                 </div>
-                <div className="task-click">
-                  <i className="fa fa-trash-alt" />
-                </div>
+                <Popconfirm
+                  title="Are you sure to delete this task?"
+                  onConfirm={() => {
+                    dispatch({
+                      type: DELETE_TASK_API,
+                      taskID: taskDetail.taskId,
+                    });
+                  }}
+                 
+                  onCancel={() => {}}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <div className="task-click">
+                    <i className="fa fa-trash-alt" />
+                  </div>
+                </Popconfirm>
+
                 <div className="task-click">
                   <button
                     type="button"
@@ -347,13 +394,8 @@ export default function ModalInfo() {
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-8">
-                    <p className="issue">
-                      This is an issue of type:
-                      <span className="ms-1 text text-danger">
-                        {taskDetail.taskTypeDetail?.taskType}
-                      </span>
-                    </p>
-                    <div className="description title">
+                    <p className="issue issue-name">{taskDetail.taskName}</p>
+                    <div className="description title-desc">
                       <p className="fw-700 fs-4">Description</p>
                       {renderDescription()}
                     </div>
@@ -383,12 +425,12 @@ export default function ModalInfo() {
                     </div>
                     <div className="assignees title">
                       <h6>ASSIGNEES</h6>
-                      <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center flex-wrap">
                         {taskDetail.assigness.map((assignee, index) => {
                           return (
                             <div
                               key={index}
-                              className="item d-flex align-items-center"
+                              className="item d-flex align-items-center "
                             >
                               <Avatar src={assignee.avatar}></Avatar>
 
@@ -408,10 +450,14 @@ export default function ModalInfo() {
                         })}
 
                         <Select
-                          style={{ width: "100%" }}
+                          menuPortalTarget={document.querySelector("body")}
+                          styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                          }}
+                          style={{ width: "50%", margin: "8px 0 12px" }}
                           options={listAssignees}
                           placement="bottomLeft"
-                          placeholder="Select a person"
+                          placeholder="Select a person ..."
                           optionFilterProp="label"
                           onSelect={(value) => {
                             let userSelected = projectDetail.members.find(

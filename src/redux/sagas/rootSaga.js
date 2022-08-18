@@ -28,6 +28,7 @@ export function* rootSaga() {
     JiraMangeTaskSaga.theoDoiUpdateTaskStatus(),
     JiraMangeTaskSaga.theoDoiCreateTask(),
     JiraMangeTaskSaga.theoDoiGetTaskDetail(),
+    JiraMangeTaskSaga.theoDoiDeleteTask(),
     JiraMangeTaskSaga.theoDoiHandleChangeAndPostTaskDetail(),
     JiraManageCommentSaga.theoDoiGetComment(),
     JiraManageCommentSaga.theoDoiDeleteComment(),

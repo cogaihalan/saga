@@ -6,8 +6,12 @@
 td {
   vertical-align: middle;
 }
+
 .card {
   box-shadow: none !important;
+}
+.btn {
+  border-radius: 0px !important;
 }
 .btn:focus {
   box-shadow: none !important;
@@ -410,14 +414,30 @@ p {
   align-items: center;
   justify-content: center;
 }
+.task-btns button.btn {
+  padding: 0.1rem 0.5rem;
+  font-size: 12px;
+  border-radius: 0;
+}
 
 .modal-info .modal-body .issue,
 .title h6 {
+  color: rgb(23, 43, 77);
   font-size: 18px;
   font-weight: 600;
   text-transform: uppercase;
 }
-
+.issue.issue-name {
+  font-size: 24px;
+  padding: 7px 7px 8px;
+  line-height: 1.28;
+}
+.title-desc p {
+  padding: 20px 0px 6px;
+  font-size: 15px;
+  font-weight: normal;
+  color: rgb(23, 43, 77);
+}
 .modal-info .modal-body .description p:first-child {
   margin-bottom: 5px;
 }
@@ -436,6 +456,9 @@ p {
   margin-right: 15px;
 }
 
+.display-comment {
+  display: flex;
+}
 .display-comment .avatar {
   margin-right: 15px;
 }

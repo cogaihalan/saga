@@ -5,6 +5,7 @@ import {
   CHANGE_ASSIGNESS,
   CLOSE_DRAWER,
   CREATE_TASK_API,
+  DELETE_TASK_API,
   GET_PROJECT_DETAIL_API,
   GET_TASK_DETAIL,
   GET_TASK_DETAIL_API,
@@ -137,6 +138,24 @@ function* getTaskDetail(action) {
 }
 export function* theoDoiGetTaskDetail() {
   yield takeLatest(GET_TASK_DETAIL_API, getTaskDetail);
+}
+
+function* deleteTask(action) {
+  try {
+    const { status } = yield call(JiraService.deleteTask, action.taskID);
+    if (status === STATUS_CODE.SUCCESS) {
+      Notification("success", `Remove task ${action.taskID} successfully !`);
+    }
+  } catch (err) {
+    Notification(
+      "error",
+      `Remove task ${action.taskID} fail !`,
+      `${err.response.data.message}`
+    );
+  }
+}
+export function* theoDoiDeleteTask() {
+  yield takeLatest(DELETE_TASK_API, deleteTask);
 }
 
 function* handleChangeAndPostTaskDetail(action) {

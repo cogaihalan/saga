@@ -1,7 +1,6 @@
 import "./App.css";
 import { Switch, useHistory } from "react-router-dom";
 import LoadingComponent from "./components/Global/LoadingComponent/LoadingComponent";
-import Modal from "./HOC/Modal/Modal";
 import { UserLoginTemplate } from "./templates/HomeTemplate/UserLoginTemplate";
 import LoginJiraWithFormik from "./pages/JiraClone/LoginJira/LoginJira";
 import { useEffect } from "react";
@@ -24,36 +23,9 @@ function App() {
   }, []);
   return (
     <>
-      <Modal></Modal>
       <JiraModal></JiraModal>
       <LoadingComponent></LoadingComponent>
       <Switch>
-        {/* <HomeTemplate exact path="/DnD" Component={DnDLibrary}></HomeTemplate> */}
-        {/* <HomeTemplate
-          exact
-          path="/todolist_thunk"
-          Component={TodoListRedux}
-        ></HomeTemplate>
-        <HomeTemplate
-          exact
-          path="/todolist_saga"
-          Component={TodoListSaga}
-        ></HomeTemplate>
-        <HomeTemplate
-          exact
-          path="/todolist"
-          Component={TodoList}
-        ></HomeTemplate>
-        <HomeTemplate exact path="/hoc" Component={DemoModal}></HomeTemplate>
-        <HomeTemplate exact path="/home" Component={Home}></HomeTemplate>
-        <HomeTemplate exact path="/about" Component={About}></HomeTemplate> */}
-        {/* <HomeTemplate
-          exact
-          path="/detail/:id"
-          Component={Detail}
-        ></HomeTemplate>
-        <HomeTemplate exact path="/profile" Component={Profile}></HomeTemplate>
-        <HomeTemplate exact path="*" Component={PageNotFound}></HomeTemplate> */}
         <UserLoginTemplate
           exact
           path="/login"
@@ -69,7 +41,11 @@ function App() {
           path="/"
           Component={ProjectManagement}
         ></JiraTemplate>
-        <JiraTemplate exact path="/jira" Component={MainJira}></JiraTemplate>
+        <JiraTemplate
+          exact
+          path="/jira"
+          Component={ProjectManagement}
+        ></JiraTemplate>
         <JiraTemplate
           exact
           path="/jira/create"
